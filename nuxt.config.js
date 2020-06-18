@@ -1,7 +1,26 @@
+const webpack = require("webpack"),
+    path = require("path");
+
 module.exports = {
+    vue: { config: { productionTip: false } },
+    buildModules: [
+        '@nuxtjs/stylelint-module',
+        '@nuxtjs/style-resources',
+        'cookie-universal-nuxt',
+        [
+            'nuxt-vue-material',
+            { components: [ "MdButton" ] }
+        ]
+    ],
     /*
   ** Headers of the page
   */
+    styleResources: {
+        scss: [
+            'assets/scss/_variables.scss',
+            'assets/scss/_mixins.scss'
+        ]
+    },
     head: {
         title: 'sellbrocke-front-app',
         meta: [
@@ -13,6 +32,10 @@ module.exports = {
             { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
         ]
     },
+    css: [
+        { src: "~/assets/scss/main.scss", lang: "scss" }
+    ],
+    vendor: [ '~/assets/DevLogger/index.js' ],
     /*
   ** Customize the progress bar color
   */
@@ -32,6 +55,14 @@ module.exports = {
                     loader: 'eslint-loader',
                     exclude: /(node_modules)/
                 });
+            }
+
+            config.plugins.push(
+                new webpack.DefinePlugin({ isDev }),
+                new webpack.ProvidePlugin({ "dl": [ path.resolve(__dirname, "./assets/js/devLogger.js"), "default" ] })
+            );
+            if(isClient) {
+                config.devtool = isDev ? "source-map": "none";
             }
         }
     }

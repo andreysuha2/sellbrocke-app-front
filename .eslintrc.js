@@ -1,5 +1,9 @@
 module.exports = {
   root: true,
+  globals: {
+      dl: "readonly",
+      isDev: "readonly"
+  },
   env: {
     browser: true,
     node: true
