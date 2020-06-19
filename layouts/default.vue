@@ -1,53 +1,64 @@
 <template>
-  <div>
-    <nuxt/>
+  <div class="app flex flex-col">
+    <app-header/>
+    <div class="flex app--wrapper">
+        <div class="app--menu">
+            <app-menu/>
+        </div>
+        <div class="app--content flex flex-col">
+            <main class="app--main">
+                <nuxt/>
+            </main>
+            <app-footer class="app--footer"/>
+        </div>
+    </div>
   </div>
 </template>
 
-<style>
-html {
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
+<script>
+import AppHeader from "@global/TheHeader";
+import AppFooter from "@global/TheFooter";
+import AppMenu from "@global/TheMenu";
 
-*, *:before, *:after {
-  box-sizing: border-box;
-  margin: 0;
-}
+export default {
+    components: {
+        "app-header": AppHeader,
+        "app-footer": AppFooter,
+        "app-menu": AppMenu
+    }
+};
+</script>
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
+<style lang="scss" scoped>
+.app {
+    background-color: $appBg1;
+    height: 100%;
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
+    &--wrapper {
+        height: 100%;
+    }
 
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
+    &--menu {
+        width: 100%;
+        max-width: 200px;
+        background: {
+            color: $appBg2;
+        };
+    }
 
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+    &--content {
+        width: 100%;
+    }
+
+    &--main {
+        padding: 20px;
+        overflow-y: scroll;
+        flex: 1 0 auto;
+    }
+
+    &--footer {
+        flex: 0 0 auto;
+    }
 }
 </style>
 
