@@ -21,6 +21,7 @@
     "cookie-universal-nuxt": "^2.1.4",
     "normalize-scss": "^7.0.1",
     "nuxt": "^2.12.2",
+    "nuxt-material-design-icons": "^1.0.4",
     "nuxt-vue-material": "^1.2.0",
     "simplifyer-dev-logger": "0.0.7",
     "uninstall": "0.0.0"

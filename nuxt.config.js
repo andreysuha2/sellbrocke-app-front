@@ -7,9 +7,10 @@ module.exports = {
         '@nuxtjs/stylelint-module',
         '@nuxtjs/style-resources',
         'cookie-universal-nuxt',
+        'nuxt-material-design-icons',
         [
             'nuxt-vue-material',
-            { components: [ "MdButton" ] }
+            { components: [ "MdButton", "MdIcon" ] }
         ]
     ],
     /*
@@ -36,6 +37,7 @@ module.exports = {
         { src: "~/assets/scss/main.scss", lang: "scss" }
     ],
     vendor: [ '~/assets/DevLogger/index.js' ],
+    plugins: [ '~/plugins/register.js' ],
     /*
   ** Customize the progress bar color
   */
@@ -64,6 +66,18 @@ module.exports = {
             if(isClient) {
                 config.devtool = isDev ? "source-map": "none";
             }
+
+            const aliases = {
+                "@assets": path.resolve(__dirname, "./assets"),
+                "@lib": path.resolve(__dirname, "./assets/js"),
+                "@scss": path.resolve(__dirname, "./assets/scss"),
+                "@components": path.resolve(__dirname, "./components"),
+                "@global": path.resolve(__dirname, "./components/global"),
+                "@icons": path.resolve(__dirname, "./assets/icons"),
+                "@templates": path.resolve(__dirname, "./components/templates")
+            };
+
+            Object.assign(config.resolve.alias, aliases);
         }
     }
 };
