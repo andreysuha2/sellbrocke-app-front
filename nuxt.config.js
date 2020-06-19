@@ -79,7 +79,7 @@ module.exports = {
                 "@global": path.resolve(__dirname, "./components/global"),
                 "@icons": path.resolve(__dirname, "./assets/icons"),
                 "@templates": path.resolve(__dirname, "./components/templates"),
-                "@helpers": path.resolve(__dirname, "./assets/helpers")
+                "@helpers": path.resolve(__dirname, "./assets/js/helpers")
             };
 
             Object.assign(config.resolve.alias, aliases);

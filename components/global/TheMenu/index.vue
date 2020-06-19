@@ -1,46 +1,19 @@
 <template>
     <div class="app-menu">
+        <menu-item
+            v-for="item in list"
+            v-bind="item"
+            :key="item.key"/>
     </div>
 </template>
 
 <script>
+import MenuItem from "./MenuItem";
+import { mapState } from "vuex";
+
 export default {
-    data() {
-        return {
-            list: [
-                {
-                    name: "Orders",
-                    link: "#",
-                    icon: "",
-                    children: [
-                        {
-                            name: "List",
-                            link: "#"
-                        },
-                        {
-                            name: "Custom quotes",
-                            link: "#"
-                        }
-                    ]
-                },
-                {
-                    name: "Devices",
-                    link: "#",
-                    icon: "",
-                    children: [
-                        {
-                            name: "List",
-                            link: "#"
-                        },
-                        {
-                            name: "Conditions",
-                            link: "#"
-                        }
-                    ]
-                }
-            ]
-        };
-    }
+    components: { "menu-item": MenuItem },
+    computed: { ...mapState("app", { list: "menuList" }) }
 };
 </script>
 
