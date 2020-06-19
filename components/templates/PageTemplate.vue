@@ -1,12 +1,16 @@
 <template>
     <div class="app-page">
-        <div class="app-page--header flex justify-between items-center">
+        <div
+            :class="headerClass"
+            class="app-page--header flex justify-between items-center">
             <div class="app-page--title">
                 <h1>{{ title }}</h1>
             </div>
             <slot name="header"></slot>
         </div>
-        <div class="app-page--body">
+        <div
+            :class="bodyClass"
+            class="app-page--body">
             <slot></slot>
         </div>
     </div>
@@ -18,6 +22,14 @@ export default {
         title: {
             type: String,
             required: true
+        },
+        headerClass: {
+            type: [ Array, Object ],
+            default() { return []; }
+        },
+        bodyClass: {
+            type: [ Array, Object ],
+            default() { return []; }
         }
     }
 };
