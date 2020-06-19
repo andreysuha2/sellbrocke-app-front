@@ -1,4 +1,6 @@
 <template>
-  <section class="container">
-  </section>
+  <app-page title="Index">
+      <template #header>test</template>
+      body
+  </app-page>
 </template>

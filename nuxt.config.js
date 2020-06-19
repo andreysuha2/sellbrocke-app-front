@@ -37,6 +37,7 @@ module.exports = {
         { src: "~/assets/scss/main.scss", lang: "scss" }
     ],
     vendor: [ '~/assets/DevLogger/index.js' ],
+    plugins: [ '~/plugins/register.js' ],
     /*
   ** Customize the progress bar color
   */
@@ -72,7 +73,8 @@ module.exports = {
                 "@scss": path.resolve(__dirname, "./assets/scss"),
                 "@components": path.resolve(__dirname, "./components"),
                 "@global": path.resolve(__dirname, "./components/global"),
-                "@icons": path.resolve(__dirname, "./assets/icons")
+                "@icons": path.resolve(__dirname, "./assets/icons"),
+                "@templates": path.resolve(__dirname, "./components/templates")
             };
 
             Object.assign(config.resolve.alias, aliases);
