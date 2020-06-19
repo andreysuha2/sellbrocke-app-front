@@ -3,11 +3,11 @@
     <app-header/>
     <div class="flex app--wrapper">
         <div class="app--menu"></div>
-        <div class="app--content">
+        <div class="app--content flex flex-col">
             <main class="app--main">
                 <nuxt/>
             </main>
-            <app-footer/>
+            <app-footer class="app--footer"/>
         </div>
     </div>
   </div>
@@ -46,9 +46,14 @@ export default {
         width: 100%;
     }
 
-    &--app-main {
+    &--main {
         padding: 20px;
-        overflow-x: scroll;
+        overflow-y: scroll;
+        flex: 1 0 auto;
+    }
+
+    &--footer {
+        flex: 0 0 auto;
     }
 }
 </style>
