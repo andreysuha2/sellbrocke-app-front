@@ -2,7 +2,9 @@
   <div class="app flex flex-col">
     <app-header/>
     <div class="flex app--wrapper">
-        <div class="app--menu"></div>
+        <div class="app--menu">
+            <app-menu/>
+        </div>
         <div class="app--content flex flex-col">
             <main class="app--main">
                 <nuxt/>
@@ -16,11 +18,13 @@
 <script>
 import AppHeader from "@global/TheHeader";
 import AppFooter from "@global/TheFooter";
+import AppMenu from "@global/TheMenu";
 
 export default {
     components: {
         "app-header": AppHeader,
-        "app-footer": AppFooter
+        "app-footer": AppFooter,
+        "app-menu": AppMenu
     }
 };
 </script>
