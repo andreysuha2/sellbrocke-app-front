@@ -1,10 +1,11 @@
 <template>
     <div class="menu-item">
-        <div class="menu-item--item flex items-center items-center">
+        <div v-on-click-out="closeSub"
+             @click="subOpen = !subOpen" class="menu-item--item flex items-center items-center">
             <md-icon class="menu-item--icon">{{ icon }}</md-icon>
             <span class="menu-item--text">{{ name }}</span>
         </div>
-        <div v-if="children" class="menu-item--sub-menu">
+        <div v-if="children && subOpen" class="menu-item--sub-menu">
             <child-item
                 v-for="item in children"
                 v-bind="item"
@@ -18,6 +19,9 @@ import SubItem from "./MenuSubItem";
 
 export default {
     components: { "child-item": SubItem },
+    data() {
+        return { subOpen: false };
+    },
     props: {
         name: {
             type: String,
@@ -37,6 +41,11 @@ export default {
                 return Array.isArray(children) || children === null;
             }
         }
+    },
+    methods: {
+        closeSub() {
+            this.subOpen = false;
+        }
     }
 };
 </script>
@@ -44,6 +53,10 @@ export default {
 <style lang="scss" scoped>
 .menu-item {
     color: $appBg;
+
+    &--item {
+        cursor: pointer;
+    }
 
     &--icon.md-icon {
         color: $appBg;
@@ -60,7 +73,7 @@ export default {
             top: 10px;
         }
         padding: {
-            left: 20px;
+            left: 25px;
         }
     }
 

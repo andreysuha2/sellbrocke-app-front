@@ -18,3 +18,11 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+.sub-item {
+    &:not(:last-child) {
+        margin-bottom: 5px;
+    }
+}
+</style>
