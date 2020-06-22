@@ -10,7 +10,7 @@ module.exports = {
         'nuxt-material-design-icons',
         [
             'nuxt-vue-material',
-            { components: [ "MdButton", "MdIcon" ] }
+            { components: [ "MdButton", "MdIcon", "MdField" ] }
         ]
     ],
     /*
