@@ -24,7 +24,8 @@
     "nuxt-material-design-icons": "^1.0.4",
     "nuxt-vue-material": "^1.2.0",
     "simplifyer-dev-logger": "0.0.7",
-    "uninstall": "0.0.0"
+    "uninstall": "0.0.0",
+    "vue-click-outside": "^1.1.0"
   },
   "devDependencies": {
     "@nuxtjs/style-resources": "^1.0.0",
