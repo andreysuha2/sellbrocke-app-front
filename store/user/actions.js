@@ -1,14 +1,20 @@
 import http from "@http/user";
+import auth from "@auth";
 
 export default {
-    loadUser() {
+    loadUser({ commit }) {
         return new Promise((resolve, reject) => {
-            http.load()
+            auth.check()
+                .then(() => http.load())
                 .then((resp) => {
                     const { user } = resp.data;
-                    dl.log(user);
+                    commit("setUser", user);
                     resolve(user);
-                }).catch(e => reject(e));
+                })
+                .catch(e => {
+                    if(e.status === 401) resolve(false);
+                    reject(e);
+                });
         });
     }
-}
+};
