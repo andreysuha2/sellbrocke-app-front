@@ -1,10 +1,10 @@
 import Vue from "vue";
-import VeeValidate from "vee-validate";
 import Notifications from "vue-notification";
+import VeeValidate from "vee-validate";
+
+Vue.use(Notifications);
 
 Vue.use(VeeValidate, {
     inject: false,
     events: "input"
 });
-
-Vue.use(Notifications);

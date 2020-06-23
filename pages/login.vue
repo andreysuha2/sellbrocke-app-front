@@ -3,22 +3,29 @@
         <div class="login-page--title">
             <h1>Login now</h1>
         </div>
-        <div class="login-page--form">
-            <md-field>
-                <label>You email</label>
-                <md-input v-model="email"></md-input>
-            </md-field>
-            <md-field>
-                <label>You password</label>
-                <md-input type="password" v-model="password"></md-input>
-            </md-field>
+        <app-form
+            :on-submit="auth"
+            form-name="loginForm"
+            class="login-page--form">
+            <app-input
+                placeholder="You email"
+                required
+                validate-name="email"
+                validate-rules="required|email"
+                displayErrorName="email"
+                v-model="email"/>
+            <app-input
+                placeholder="You password"
+                v-model="password"
+                required
+                validate-rules="required"
+                displayErrorName="password"
+                type="password"/>
             <div class="flex justify-between items-center">
-                <md-button
-                    @click="auth"
-                    class="md-raised md-primary">Login</md-button>
+                <md-button type="submit" class="md-raised md-primary">Login</md-button>
                 <nuxt-link to="/forgot-password">Forgot password?</nuxt-link>
             </div>
-        </div>
+        </app-form>
     </div>
 </template>
 
@@ -35,7 +42,7 @@ export default {
     },
     methods: {
         auth() {
-            auth.login({ email: this.email, password: this.password })
+            return auth.login({ email: this.email, password: this.password })
                 .then(() => this.$router.go("/"));
         }
     }

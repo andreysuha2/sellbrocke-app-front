@@ -52,22 +52,41 @@ export default {
         },
         handleSubmitErrors(e) {
             if(e.response && e.response.status === 422) {
-                let { errors } = e.response.data;
-                Object.entries(errors).forEach((error) => {
-                    let errorName = error[0],
-                        errorMessage = error[1][0],
-                        errorFullName = `${this.formName}.${errorName}`;
-                    if(this.$validator.fields.find({ name: errorFullName })) {
-                        this.$validator.errors.add({
-                            scope: this.formName,
-                            field: errorName,
-                            msg: errorMessage
-                        });
-                    } else this.$alerts.notification(errorMessage, "error");
-                });
+                let { errors, msg } = e.response.data;
+                if(errors) {
+                    Object.entries(errors).forEach((error) => {
+                        let errorName = error[0],
+                            errorMessage = error[1][0],
+                            errorFullName = `${this.formName}.${errorName}`;
+                        if(this.$validator.fields.find({ name: errorFullName })) {
+                            this.$validator.errors.add({
+                                scope: this.formName,
+                                field: errorName,
+                                msg: errorMessage
+                            });
+                        } else {
+                            this.$notify({
+                                title: "Error message",
+                                type: "error",
+                                message: errorMessage
+                            });
+                        }
+                    });
+                }
+                if(msg) {
+                    this.$notify({
+                        type: "error",
+                        title: "Error message",
+                        text: msg
+                    });
+                }
             } else {
                 dl.error(e);
-                this.$alerts.notification("Что пошло не так, попробуйте позже!", "error");
+                this.$notify({
+                    title: "Error message",
+                    type: "error",
+                    text: "Something went wrong! Try again later."
+                });
             }
         }
     }
