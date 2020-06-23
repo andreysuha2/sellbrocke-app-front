@@ -8,14 +8,16 @@
         <md-button class="menu--avatar md-icon-button md-raised">
             <md-icon>person</md-icon>
         </md-button>
-        <span class="menu--name">John Doe</span>
+        <span class="menu--name">{{ name }}</span>
     </div>
 </template>
 
 <script>
 import auth from "@auth";
+import { mapState } from "vuex";
 
 export default {
+    computed: { ...mapState("user", { name: (state) => state.currentUser.name }) },
     methods: {
         logout() {
             auth.logout()
