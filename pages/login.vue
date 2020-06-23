@@ -31,6 +31,7 @@
 
 <script>
 import auth from "@auth";
+import { mapMutations } from "vuex";
 
 export default {
     layout: "auth",
@@ -41,9 +42,13 @@ export default {
         };
     },
     methods: {
+        ...mapMutations("user", { authUser: "setUser" }),
         auth() {
             return auth.login({ email: this.email, password: this.password })
-                .then(() => this.$router.go("/"));
+                .then((user) => {
+                    this.authUser(user);
+                    this.$router.push({ name: "index" });
+                });
         }
     }
 };
