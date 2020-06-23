@@ -36,7 +36,7 @@ export default {
     methods: {
         auth() {
             auth.login({ email: this.email, password: this.password })
-                .then((resp) => dl.log(resp));
+                .then(() => this.$router.go("/"));
         }
     }
 };
