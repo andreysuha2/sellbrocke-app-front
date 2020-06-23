@@ -6,14 +6,16 @@
         <div class="login-page--form">
             <md-field>
                 <label>You email</label>
-                <md-input></md-input>
+                <md-input v-model="email"></md-input>
             </md-field>
             <md-field>
                 <label>You password</label>
-                <md-input></md-input>
+                <md-input type="password" v-model="password"></md-input>
             </md-field>
             <div class="flex justify-between items-center">
-                <md-button class="md-raised md-primary">Login</md-button>
+                <md-button
+                    @click="auth"
+                    class="md-raised md-primary">Login</md-button>
                 <nuxt-link to="/forgot-password">Forgot password?</nuxt-link>
             </div>
         </div>
@@ -21,7 +23,23 @@
 </template>
 
 <script>
-export default { layout: "auth" };
+import auth from "@auth";
+
+export default {
+    layout: "auth",
+    data() {
+        return {
+            email: "",
+            password: ""
+        };
+    },
+    methods: {
+        auth() {
+            auth.login({ email: this.email, password: this.password })
+                .then(() => this.$router.go("/"));
+        }
+    }
+};
 </script>
 
 <style lang="scss" scoped>

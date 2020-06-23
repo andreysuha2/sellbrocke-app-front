@@ -21,6 +21,7 @@ import AppFooter from "@global/TheFooter";
 import AppMenu from "@global/TheMenu";
 
 export default {
+    middleware: "authenticate",
     components: {
         "app-header": AppHeader,
         "app-footer": AppFooter,

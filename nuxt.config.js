@@ -37,11 +37,16 @@ module.exports = {
         { src: "~/assets/scss/main.scss", lang: "scss" }
     ],
     vendor: [
-        '~/assets/DevLogger/index.js',
-        '~/assets/helpers/generators.js',
-        '~/assets/DevLogger/functions.js'
+        '~/assets/js/DevLogger/index.js',
+        '~/assets/js/helpers/generators.js',
+        '~/assets/js/helpers/functions.js',
+        '~/assets/js/http/index.js',
+        '~/assets/js/auth/index.js'
     ],
-    plugins: [ '~/plugins/register.js' ],
+    plugins: [
+        '~/plugins/register.js',
+        '~/plugins/cookieResolve/index.js'
+    ],
     /*
   ** Customize the progress bar color
   */
@@ -79,7 +84,9 @@ module.exports = {
                 "@global": path.resolve(__dirname, "./components/global"),
                 "@icons": path.resolve(__dirname, "./assets/icons"),
                 "@templates": path.resolve(__dirname, "./components/templates"),
-                "@helpers": path.resolve(__dirname, "./assets/js/helpers")
+                "@helpers": path.resolve(__dirname, "./assets/js/helpers"),
+                "@http": path.resolve(__dirname, "./assets/js/http"),
+                "@auth": path.resolve(__dirname, "./assets/js/auth")
             };
 
             Object.assign(config.resolve.alias, aliases);
