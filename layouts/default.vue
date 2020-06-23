@@ -1,5 +1,6 @@
 <template>
   <div class="app flex flex-col">
+    <notifications position="top right" />
     <app-header/>
     <div class="flex app--wrapper">
         <div class="app--menu">

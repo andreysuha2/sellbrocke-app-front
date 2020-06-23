@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VeeValidate from "vee-validate";
-import Notifications from "vue-notification/dist/ssr";
+import Notifications from "vue-notification";
 
 Vue.use(VeeValidate, {
     inject: false,

@@ -48,7 +48,7 @@ module.exports = {
     plugins: [
         '~/plugins/register.js',
         '~/plugins/cookieResolve/index.js',
-        '~/plugins/vue-plugins.js'
+        { src: '~/plugins/vue-plugins.js', mode: 'client' }
     ],
     /*
   ** Customize the progress bar color

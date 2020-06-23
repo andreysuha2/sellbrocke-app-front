@@ -1,5 +1,6 @@
 <template>
     <div class="app-auth flex flex-center">
+        <notifications position="top right" />
         <nuxt/>
     </div>
 </template>
