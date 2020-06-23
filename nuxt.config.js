@@ -37,6 +37,8 @@ module.exports = {
         { src: "~/assets/scss/main.scss", lang: "scss" }
     ],
     vendor: [
+        "vue-notification",
+        "vee-validate",
         '~/assets/js/DevLogger/index.js',
         '~/assets/js/helpers/generators.js',
         '~/assets/js/helpers/functions.js',
@@ -45,7 +47,9 @@ module.exports = {
     ],
     plugins: [
         '~/plugins/register.js',
-        '~/plugins/cookieResolve/index.js'
+        '~/plugins/cookieResolve/index.js',
+        { src: '~/plugins/vue-plugins.js', mode: 'client' },
+        { src: '~/plugins/vue-plugins-server.js', mode: 'server' }
     ],
     /*
   ** Customize the progress bar color
