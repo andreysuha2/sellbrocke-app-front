@@ -4,3 +4,7 @@
       body
   </app-page>
 </template>
+
+<script>
+export default { created() { dl.log("test"); } };
+</script>

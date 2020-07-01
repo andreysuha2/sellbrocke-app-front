@@ -40,7 +40,7 @@ module.exports = {
     vendor: [
         "vue-notification",
         "vee-validate",
-        '~/assets/js/DevLogger/index.js',
+        '~/assets/js/devLogger/index.js',
         '~/assets/js/helpers/generators.js',
         '~/assets/js/helpers/functions.js',
         '~/assets/js/http/index.js',
