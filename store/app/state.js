@@ -4,6 +4,13 @@ export default () => ({
     menuList: [
         {
             key: genKey("MENU_ITEM"),
+            name: "Merchants",
+            link: "merchants",
+            icon: "store",
+            children: null
+        },
+        {
+            key: genKey("MENU_ITEM"),
             name: "Orders",
             link: "#",
             icon: "assignment",

@@ -1,7 +1,7 @@
 import axios from "axios";
 import auth from "@auth";
 
-const url = process.env.NUXT_ENV_API_BASE_URL,
+const url = `${process.env.NUXT_ENV_API_BASE_URL}/api/admin`,
     interceptors = {
         response: {
             success(context, response) { return response; },
