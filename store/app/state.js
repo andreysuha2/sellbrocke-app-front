@@ -7,18 +7,7 @@ export default () => ({
             name: "Merchants",
             link: "merchants",
             icon: "store",
-            children: [
-                {
-                    key: genKey("MENU_SUB_ITEM"),
-                    name: "List",
-                    link: "#"
-                },
-                {
-                    key: genKey("MENU_SUB_ITEM"),
-                    name: "Custom quotes",
-                    link: "#"
-                }
-            ]
+            children: null
         },
         {
             key: genKey("MENU_ITEM"),

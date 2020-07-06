@@ -1,7 +1,7 @@
 <template>
     <div class="menu-item">
         <div v-on-click-out="closeSub"
-             @click="subOpen = !subOpen" class="menu-item--item flex items-center items-center">
+             @click="navigate" class="menu-item--item flex items-center items-center">
             <md-icon class="menu-item--icon">{{ icon }}</md-icon>
             <span class="menu-item--text">{{ name }}</span>
         </div>
@@ -45,6 +45,10 @@ export default {
     methods: {
         closeSub() {
             this.subOpen = false;
+        },
+        navigate() {
+            if(this.link !== "#") this.$router.push({ name: this.link });
+            this.subOpen = !this.subOpen;
         }
     }
 };
