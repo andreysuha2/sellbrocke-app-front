@@ -1,5 +1,6 @@
 const webpack = require("webpack"),
-    path = require("path");
+    path = require("path"),
+    materialComponents = require("./materialComponentsList");
 require("./env.config");
 
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
         'nuxt-material-design-icons',
         [
             'nuxt-vue-material',
-            { components: [ "MdButton", "MdIcon", "MdField" ] }
+            { components: materialComponents }
         ]
     ],
     /*
