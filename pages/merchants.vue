@@ -4,12 +4,16 @@
             <md-table-row>
                 <md-table-head class="merchants-list--id" md-numeric>ID</md-table-head>
                 <md-table-head>Name</md-table-head>
+                <md-table-head>Url</md-table-head>
                 <md-table-head>Login</md-table-head>
                 <md-table-head>Password</md-table-head>
             </md-table-row>
             <md-table-row v-for="merchant in merchants" :key="merchant.id">
                 <md-table-cell class="merchants-list--id" md-numeric>{{ merchant.id }}</md-table-cell>
                 <md-table-cell>{{ merchant.name }}</md-table-cell>
+                <md-table-cell>
+                    <a target="_blank" :href="`${merchant.url}/wp-login.php`">{{ merchant.url }}</a>
+                </md-table-cell>
                 <md-table-cell>{{ merchant.login }}</md-table-cell>
                 <md-table-cell>
                     <md-button
