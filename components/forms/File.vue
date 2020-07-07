@@ -1,15 +1,14 @@
 <template>
     <md-field :class="classList.field">
         <label v-if="placeholder">{{ placeholder }}</label>
-        <md-input
+        <md-file
             :data-vv-name="formValidateName"
             v-validate
             v-bind="$attrs"
             :data-vv-rules="validateRules"
             :data-vv-as="validateFieldName"
-            :type="type"
             :required="required"
-            v-model="val"></md-input>
+            @md-change="$emit('input', $event)"></md-file>
         <span
             v-if="subText"
             class="md-helper-text">{{ subText }}</span>
@@ -24,18 +23,11 @@ export default {
     inheritAttrs: false,
     mixins: [ Mixin ],
     props: {
-        type: {
-            type: String,
-            default: "text"
-        },
         placeholder: {
             type: [ String, Boolean ],
             default: false
         },
-        value: {
-            type: [ String, Number ],
-            default: ""
-        },
+        value: { default: "" },
         required: {
             type: Boolean,
             default: false
