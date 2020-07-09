@@ -51,7 +51,8 @@ export default {
             }
         },
         handleSubmitErrors(e) {
-            if(e.response && e.response.status === 422) {
+            const code = e.response ? e.response.status : null;
+            if(code && (code === 422 || code === 403)) {
                 let { errors, message } = e.response.data;
                 if(errors) {
                     Object.entries(errors).forEach((error) => {

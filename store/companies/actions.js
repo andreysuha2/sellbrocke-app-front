@@ -19,5 +19,16 @@ export default {
                     resolve(company);
                 }).catch((e) => reject(e));
         });
+    },
+    updateCompany({ commit }, { data, id }) {
+        return new Promise((resolve, reject) => {
+            http.company.update(id, data)
+                .then((resp) => {
+                    const { company } = resp.data;
+                    commit("updateCompany", company);
+                    resolve(company);
+                })
+                .catch((e) => reject(e));
+        });
     }
 };

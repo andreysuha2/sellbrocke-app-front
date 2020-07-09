@@ -5,6 +5,7 @@ module.exports = [
     "MdTable",
     "MdContent",
     "MdDialog",
+    "MdDialogConfirm",
     "MdEmptyState",
     "MdCard"
 ];

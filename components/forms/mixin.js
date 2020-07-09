@@ -51,7 +51,6 @@ export default {
         },
         removeErrorDisplayed(validateName = null) {
             const name = validateName || this.formValidateName;
-            dl.log(name);
             if(this.errors.has(name)) this.errors.remove(name);
         },
         removeValidation(validateName = null) {

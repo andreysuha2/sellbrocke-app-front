@@ -5,6 +5,7 @@
             v-validate
             :data-vv-name="formValidateName"
             v-bind="$attrs"
+            :value="val"
             @md-change="change($event)"></md-file>
         <span
             v-if="subText"
@@ -35,14 +36,25 @@ export default {
             default: false
         }
     },
+    data() {
+        return { files: null };
+    },
     computed: {
-        val() { return this.value; },
+        val: {
+            get() {
+                if(this.files && this.files.length) {
+                    return [ ...this.files ].map((file) => file.name).join(", ");
+                }
+                return typeof this.value === "string" ? this.value.split("/").reverse()[0] : null;
+            }
+        },
         classList() {
             return { field: { "md-invalid": this.errors.has(this.formValidateName) } };
         }
     },
     methods: {
         change(files) {
+            this.files = files;
             this.removeErrorDisplayed();
             this.$emit('input', files);
         }

@@ -1,16 +1,34 @@
 <template>
-    <md-card md-with-hover class="card">
+    <md-card
+        md-with-hover class="card flex">
         <div
             :style="logoBg"
             class="card--logo flex flex-center">
         </div>
-        <div class="card--name">
-            <span>{{ name }}</span>
+        <div class="card--info card-info">
+            <div class="card-info--row">
+                <span class="card-info--name">Name:</span>
+                <span class="card-info--cell">{{ name }}</span>
+            </div>
+            <div class="card-info--row">
+                <span class="card-info--name">Percent:</span>
+                <span class="card-info--cell">{{ priceReduction }}%</span>
+            </div>
+            <div class="card-info--row">
+                <span class="card-info--name">Slug:</span>
+                <span class="card-info--cell">{{ slug }}</span>
+            </div>
+            <div class="card-info--row">
+                <span class="card-info--name">Devices:</span>
+                <span class="card-info--cell">{{ devicesCount }}</span>
+            </div>
         </div>
     </md-card>
 </template>
 
 <script>
+import { randomNumber } from "@helpers/generators";
+
 export default {
     props: {
         id: {
@@ -24,7 +42,18 @@ export default {
         logo: {
             type: String,
             required: true
+        },
+        priceReduction: {
+            type: Number,
+            required: true
+        },
+        slug: {
+            type: String,
+            required: true
         }
+    },
+    data() {
+        return { devicesCount: randomNumber(0, 1000) };
     },
     computed: {
         logoBg() {
@@ -36,7 +65,8 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-    padding: 20px;
+    padding: 15px;
+    cursor: pointer;
 
     &--logo {
         width: 100px;
@@ -46,9 +76,19 @@ export default {
         background-repeat: no-repeat;
     }
 
+    &--info {
+        margin: {
+            left: 20px;
+        }
+    }
+}
+
+.card-info {
+    &--row:not(:last-child) {
+        margin-bottom: 5px;
+    }
+
     &--name {
-        margin-top: 10px;
-        text-align: center;
         font-weight: bold;
     }
 }
