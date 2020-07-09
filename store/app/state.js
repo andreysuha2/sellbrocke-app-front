@@ -30,18 +30,28 @@ export default () => ({
         {
             key: genKey("MENU_ITEM"),
             name: "Devices",
-            link: "#",
+            link: "devices",
             icon: "devices",
             children: [
                 {
                     key: genKey("MENU_SUB_ITEM"),
-                    name: "List",
-                    link: "#"
+                    name: "Devices",
+                    link: "devices"
                 },
                 {
                     key: genKey("MENU_SUB_ITEM"),
-                    name: "Conditions",
-                    link: "#"
+                    name: "Companies",
+                    link: "devices-companies"
+                },
+                {
+                    key: genKey("MENU_SUB_ITEM"),
+                    name: "Categories",
+                    link: "devices-categories"
+                },
+                {
+                    key: genKey("MENU_SUB_ITEM"),
+                    name: "Defects",
+                    link: "devices-defects"
                 }
             ]
         },
@@ -62,20 +72,6 @@ export default () => ({
                     link: "#"
                 }
             ]
-        },
-        {
-            key: genKey("MENU_ITEM"),
-            name: "Categories",
-            link: "#",
-            icon: "view_list",
-            children: null
-        },
-        {
-            key: genKey("MENU_ITEM"),
-            name: "Companies",
-            link: "companies",
-            icon: "business",
-            children: null
         },
         {
             key: genKey("MENU_ITEM"),

@@ -47,7 +47,7 @@ export default {
             this.subOpen = false;
         },
         navigate() {
-            if(this.link !== "#") this.$router.push({ name: this.link });
+            if(this.link !== "#" && this.subOpen) this.$router.push({ name: this.link });
             this.subOpen = !this.subOpen;
         }
     }

@@ -1,6 +1,6 @@
 <template>
     <div class="sub-item">
-        <span>{{ name }}</span>
+        <span @click="navigate">{{ name }}</span>
     </div>
 </template>
 
@@ -15,12 +15,19 @@ export default {
             type: String,
             required: true
         }
+    },
+    methods: {
+        navigate() {
+            if(this.link !== "#") this.$router.push({ name: this.link });
+        }
     }
 };
 </script>
 
 <style lang="scss" scoped>
 .sub-item {
+    cursor: pointer;
+
     &:not(:last-child) {
         margin-bottom: 5px;
     }
