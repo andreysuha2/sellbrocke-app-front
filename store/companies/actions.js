@@ -30,5 +30,15 @@ export default {
                 })
                 .catch((e) => reject(e));
         });
+    },
+    removeCompany({ commit }, id) {
+        return new Promise((resolve, reject) => {
+            http.company.delete(id)
+                .then((resp) => {
+                    const { company } = resp.data;
+                    commit("removeCompany", company.id);
+                    resolve(company);
+                }).catch((e) => reject(e));
+        });
     }
 };

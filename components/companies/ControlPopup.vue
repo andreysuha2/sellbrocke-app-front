@@ -7,6 +7,7 @@
         <template v-if="hasCompany">
             <md-dialog-title>Control company {{ company.name }}</md-dialog-title>
             <app-form
+                ref="updateForm"
                 :on-submit="update"
                 form-name="create-company">
                 <app-file
@@ -119,7 +120,10 @@ export default {
         }
     },
     methods: {
-        ...mapActions("companies", { updateCompany: "updateCompany" }),
+        ...mapActions("companies", {
+            updateCompany: "updateCompany",
+            removeCompany: "removeCompany"
+        }),
         setField(name, value) {
             if(this.temp.hasOwnProperty(name)) {
                 if(value === this.company[name]) this.clearField(name);
@@ -160,7 +164,17 @@ export default {
             });
         },
         remove() {
-            dl.log("success");
+            this.removeCompany(this.company.id)
+                .then((company) => {
+                    this.$notify({
+                        title: "Company removed",
+                        text: `Company ${company.name} was removed`,
+                        duration: 3000
+                    });
+                    this.$emit("closePopup");
+                    this.clearForm();
+                })
+                .catch((e) => this.$refs.updateForm.handleSubmitErrors(e));
         }
     },
     created() {
