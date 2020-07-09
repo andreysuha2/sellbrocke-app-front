@@ -3,7 +3,7 @@ import http from "@http/companies";
 export default {
     loadCompanies({ commit }) {
         return new Promise((resolve, reject) => {
-            http.getAll().then((resp) => {
+            http.getCompanies().then((resp) => {
                 const { companies } = resp.data;
                 commit("loadCompanies", companies);
                 resolve(companies);

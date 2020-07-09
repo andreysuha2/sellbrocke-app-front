@@ -1,20 +1,16 @@
 import Http from "@http";
 
-class CompaniesHTTP extends Http {
+class DefectsHTTP extends Http {
     constructor() {
-        super({ slug: "companies" });
+        super({ slug: "defects" });
     }
 
-    getCompanies() {
+    getDefects() {
         return this.query.get();
     }
 
-    isFreeSlug(slug) {
-        return this.query.get(`is-free-slug/${slug}`);
-    }
-
-    get company() {
-        return this.group("company", (query) => ({
+    get defect() {
+        return this.group("defect", (query) => ({
             create: (data) => query.post("", data),
             read: (id) => query.get(`${id}`),
             update(id, data) {
@@ -26,4 +22,4 @@ class CompaniesHTTP extends Http {
     }
 }
 
-export default new CompaniesHTTP();
+export default new DefectsHTTP();
