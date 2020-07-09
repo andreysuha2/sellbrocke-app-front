@@ -3,5 +3,9 @@ module.exports = [
     "MdIcon",
     "MdField",
     "MdTable",
-    "MdContent"
+    "MdContent",
+    "MdDialog",
+    "MdDialogConfirm",
+    "MdEmptyState",
+    "MdCard"
 ];

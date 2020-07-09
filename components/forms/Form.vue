@@ -51,8 +51,9 @@ export default {
             }
         },
         handleSubmitErrors(e) {
-            if(e.response && e.response.status === 422) {
-                let { errors, msg } = e.response.data;
+            const code = e.response ? e.response.status : null;
+            if(code && (code === 422 || code === 403)) {
+                let { errors, message } = e.response.data;
                 if(errors) {
                     Object.entries(errors).forEach((error) => {
                         let errorName = error[0],
@@ -73,11 +74,11 @@ export default {
                         }
                     });
                 }
-                if(msg) {
+                if(message) {
                     this.$notify({
                         type: "error",
                         title: "Error message",
-                        text: msg
+                        text: message
                     });
                 }
             } else {
@@ -89,6 +90,9 @@ export default {
                 });
             }
         }
+    },
+    beforeDestroy() {
+        this.errors.clear();
     }
 };
 </script>

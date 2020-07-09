@@ -1,16 +1,12 @@
 <template>
     <md-field :class="classList.field">
         <label v-if="placeholder">{{ placeholder }}</label>
-        <md-input
-            :data-vv-name="formValidateName"
+        <md-file
             v-validate
+            :data-vv-name="formValidateName"
             v-bind="$attrs"
-            :data-vv-rules="validateRules"
-            :data-vv-as="validateFieldName"
-            :type="type"
-            :required="required"
-            @input="removeErrorDisplayed()"
-            v-model="val"></md-input>
+            :value="val"
+            @md-change="change($event)"></md-file>
         <span
             v-if="subText"
             class="md-helper-text">{{ subText }}</span>
@@ -20,23 +16,17 @@
 
 <script>
 import Mixin from "./mixin";
+// TODO: vee-validate не може провалидировать md-input по правилам image и size. Нужно создать кастомную валидацию
 
 export default {
     inheritAttrs: false,
     mixins: [ Mixin ],
     props: {
-        type: {
-            type: String,
-            default: "text"
-        },
         placeholder: {
             type: [ String, Boolean ],
             default: false
         },
-        value: {
-            type: [ String, Number ],
-            default: ""
-        },
+        value: { default: "" },
         required: {
             type: Boolean,
             default: false
@@ -46,13 +36,27 @@ export default {
             default: false
         }
     },
+    data() {
+        return { files: null };
+    },
     computed: {
         val: {
-            get() { return this.value; },
-            set(val) { this.$emit("input", val); }
+            get() {
+                if(this.files && this.files.length) {
+                    return [ ...this.files ].map((file) => file.name).join(", ");
+                }
+                return typeof this.value === "string" ? this.value.split("/").reverse()[0] : null;
+            }
         },
         classList() {
             return { field: { "md-invalid": this.errors.has(this.formValidateName) } };
+        }
+    },
+    methods: {
+        change(files) {
+            this.files = files;
+            this.removeErrorDisplayed();
+            this.$emit('input', files);
         }
     }
 };

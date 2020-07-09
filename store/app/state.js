@@ -73,7 +73,7 @@ export default () => ({
         {
             key: genKey("MENU_ITEM"),
             name: "Companies",
-            link: "#",
+            link: "companies",
             icon: "business",
             children: null
         },
