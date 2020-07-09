@@ -9,6 +9,7 @@
             :data-vv-as="validateFieldName"
             :type="type"
             :required="required"
+            @input="removeErrorDisplayed()"
             v-model="val"></md-input>
         <span
             v-if="subText"

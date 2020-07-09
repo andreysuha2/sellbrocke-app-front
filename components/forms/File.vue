@@ -2,13 +2,10 @@
     <md-field :class="classList.field">
         <label v-if="placeholder">{{ placeholder }}</label>
         <md-file
-            :data-vv-name="formValidateName"
             v-validate
+            :data-vv-name="formValidateName"
             v-bind="$attrs"
-            :data-vv-rules="validateRules"
-            :data-vv-as="validateFieldName"
-            :required="required"
-            @md-change="$emit('input', $event)"></md-file>
+            @md-change="change($event)"></md-file>
         <span
             v-if="subText"
             class="md-helper-text">{{ subText }}</span>
@@ -18,6 +15,7 @@
 
 <script>
 import Mixin from "./mixin";
+// TODO: vee-validate не може провалидировать md-input по правилам image и size. Нужно создать кастомную валидацию
 
 export default {
     inheritAttrs: false,
@@ -38,12 +36,15 @@ export default {
         }
     },
     computed: {
-        val: {
-            get() { return this.value; },
-            set(val) { this.$emit("input", val); }
-        },
+        val() { return this.value; },
         classList() {
             return { field: { "md-invalid": this.errors.has(this.formValidateName) } };
+        }
+    },
+    methods: {
+        change(files) {
+            this.removeErrorDisplayed();
+            this.$emit('input', files);
         }
     }
 };

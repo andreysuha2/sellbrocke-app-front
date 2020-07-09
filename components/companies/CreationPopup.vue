@@ -4,20 +4,21 @@
     @md-clicked-outside="$emit('closePopup')"
     :md-active="showPopup">
     <md-dialog-title>Create company</md-dialog-title>
-    <app-form form-name="create-company">
+    <app-form
+        :on-submit="create"
+        form-name="create-company">
         <app-file
             v-model="logo"
             required
             accept="image/*"
             validate-name="logo"
-            validate-rules="required"
             display-error-name="company logo"
             placeholder="Company logo"/>
         <app-input
             v-model="name"
             required
             validate-name="name"
-            validate-rules="required|image|size:10"
+            validate-rules="required"
             display-error-name="company name"
             placeholder="Company name"/>
         <app-input
@@ -51,6 +52,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
     props: {
         showPopup: {
@@ -91,6 +94,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions("companies", { addCompany: "createCompany" }),
         setField(name, value, formName = null) {
             if(this.temp.hasOwnProperty(name)) {
                 this.temp[name] = value;
@@ -103,10 +107,36 @@ export default {
                 this.temp[name] = value;
                 this.formData.delete(name);
             }
+        },
+        clearForm() {
+            this.temp = {
+                logo: null,
+                name: null,
+                priceReduction: null,
+                slug: null
+            };
+            this.formData = new FormData();
+        },
+        create() {
+            return new Promise((resolve, reject) => {
+                this.addCompany(this.formData)
+                    .then((company) => {
+                        this.$notify({
+                            title: `Company added`,
+                            text: `Company ${company.name} was created`,
+                            duration: 3000
+                        });
+                        this.$emit("closePopup");
+                        this.clearForm();
+                        resolve(company);
+                    }).catch((e) => reject(e));
+            });
         }
     },
-    mounted() {
-        this.formData = new FormData();
+    created() {
+        if(process.client) {
+            this.formData = new FormData();
+        }
     }
 };
 </script>

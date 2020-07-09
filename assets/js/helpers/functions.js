@@ -22,10 +22,17 @@ export function camelize(str) {
     });
 }
 
+//decamelize
 export function decamelize(str, separator = "_") {
     if(typeof str !== "string") throw new Error("decamelize error: argument str must be typeof string");
     return str
         .replace(/([a-z\d])([A-Z])/g, `$1${separator}$2`)
         .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, `$1${separator}$2`)
         .toLowerCase();
+}
+
+export function arrayChunk(arr, size) {
+    const temp = [];
+    for(let i = 0; i < arr.length; i += size) temp.push(arr.slice(i, i + size));
+    return temp;
 }

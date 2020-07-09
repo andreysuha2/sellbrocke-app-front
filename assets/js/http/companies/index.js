@@ -14,7 +14,7 @@ class CompaniesHTTP extends Http {
     }
 
     get company() {
-        return this.group((query) => ({
+        return this.group("company", (query) => ({
             create: (data) => query.post("", data),
             read: (id) => query.get(`${id}`),
             update(id, data) {
