@@ -5,8 +5,9 @@ class DefectsHTTP extends Http {
         super({ slug: "defects" });
     }
 
-    getDefects() {
-        return this.query.get();
+    getDefects(page = null) {
+        const params = page ? { page } : {};
+        return this.query.get("", { params });
     }
 
     get defect() {

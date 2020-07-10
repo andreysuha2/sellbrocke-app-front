@@ -1,9 +1,9 @@
 import http from "@http/defects";
 
 export default {
-    loadDefects({ commit }) {
+    loadDefects({ commit }, page = null) {
         return new Promise((resolve, reject) => {
-            http.getDefects()
+            http.getDefects(page)
                 .then((resp) => {
                     const { data } = resp;
                     commit("setDefects", data);

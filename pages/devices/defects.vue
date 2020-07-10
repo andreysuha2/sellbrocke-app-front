@@ -38,9 +38,9 @@
             </md-table-row>
         </md-table>
         <app-pagination
-            always-arrows
-            :current-page="50"
-            :total-pages="50"/>
+            v-if="paginateMeta"
+            :current-page="paginateMeta.currentPage"
+            :total-pages="paginateMeta.lastPage"/>
         <create-defect
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
