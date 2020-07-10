@@ -1,6 +1,7 @@
 <template>
     <div v-if="totalPages > 1" class="app-pagination flex items-center">
         <md-button
+            @click="prev"
             v-if="displayArrow.prev"
             :disabled="isFirstPage"
             class="md-button md-primary md-raised app-paginate--arrow app-paginate--arrow__prev">
@@ -19,6 +20,7 @@
             </div>
         </div>
         <md-button
+            @click="next"
             v-if="displayArrow.next"
             :disabled="isLastPage"
             class="md-button md-primary md-raised app-paginate--arrow app-paginate--arrow__next">
@@ -113,7 +115,7 @@ export default {
             if(!this.isLastPage) this.changePage(this.currentPage + 1);
         },
         prev() {
-            if(!this.isFirstPage) this.changePage(this.currentPage + 1);
+            if(!this.isFirstPage) this.changePage(this.currentPage - 1);
         }
     }
 };

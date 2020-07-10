@@ -11,12 +11,27 @@ export default {
                 }).catch((e) => reject(e));
         });
     },
-    createDefect({ commit }, data) {
+    createDefect({ commit, state, dispatch }, data) {
         return new Promise((resolve, reject) => {
             http.defect.create(data)
                 .then((resp) => {
                     const { defect } = resp.data;
-                    commit("addDefect", defect);
+                    if(state.meta.currentPage === 1) {
+                        commit("addDefect", defect);
+                        commit("recalculateMeta", 1);
+                    } else dispatch("loadDefects", state.meta.currentPage);
+                    resolve(defect);
+                }).catch(e => reject(e));
+        });
+    },
+    deleteDefect({ commit, getters }, id) {
+        return new Promise((resolve, reject) => {
+            http.defect.delete(id, { lastDefectId: getters.lastDefectId })
+                .then((resp) => {
+                    const { defect, nextDefect } = resp.data;
+                    commit("deleteDefect", id);
+                    commit("recalculateMeta", -1);
+                    if(nextDefect) commit("addNextDefect", nextDefect);
                     resolve(defect);
                 }).catch(e => reject(e));
         });

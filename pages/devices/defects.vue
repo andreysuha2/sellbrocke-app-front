@@ -14,33 +14,48 @@
                 @click="showCreatePopup = true"
                 class="md-primary md-raised">Create defect</md-button>
         </md-empty-state>
-        <md-table v-else class="defects-list">
-            <md-table-row>
-                <md-table-head class="defects-list--id" md-numeric>ID</md-table-head>
-                <md-table-head>Name</md-table-head>
-                <md-table-head>Price reduction</md-table-head>
-                <md-table-head>Description</md-table-head>
-                <md-table-head>Control</md-table-head>
-            </md-table-row>
-            <md-table-row v-for="defect in defectsList" :key="defect.id">
-                <md-table-cell class="merchants-list--id" md-numeric>{{ defect.id }}</md-table-cell>
-                <md-table-cell>{{ defect.name }}</md-table-cell>
-                <md-table-cell>{{ defect.priceReduction }}%</md-table-cell>
-                <md-table-cell>{{ defect.description }}</md-table-cell>
-                <md-table-cell>
-                    <md-button class="defects-list--control md-icon-button md-raised">
-                        <md-icon>edit</md-icon>
-                    </md-button>
-                    <md-button class="defects-list--control md-icon-button md-raised">
-                        <md-icon>delete</md-icon>
-                    </md-button>
-                </md-table-cell>
-            </md-table-row>
-        </md-table>
-        <app-pagination
-            v-if="paginateMeta"
-            :current-page="paginateMeta.currentPage"
-            :total-pages="paginateMeta.lastPage"/>
+        <template v-else>
+            <md-table class="defects-list">
+                <md-table-row>
+                    <md-table-head class="defects-list--id" md-numeric>ID</md-table-head>
+                    <md-table-head>Name</md-table-head>
+                    <md-table-head>Price reduction</md-table-head>
+                    <md-table-head>Description</md-table-head>
+                    <md-table-head>Control</md-table-head>
+                </md-table-row>
+                <md-table-row v-for="defect in defectsList" :key="defect.id">
+                    <md-table-cell class="defects-list--id" md-numeric>{{ defect.id }}</md-table-cell>
+                    <md-table-cell>{{ defect.name }}</md-table-cell>
+                    <md-table-cell>{{ defect.priceReduction }}%</md-table-cell>
+                    <md-table-cell>{{ defect.description }}</md-table-cell>
+                    <md-table-cell>
+                        <md-button class="defects-list--control md-icon-button md-raised">
+                            <md-icon>edit</md-icon>
+                        </md-button>
+                        <md-button
+                            @click="removeConfimation(defect)"
+                            class="defects-list--control md-icon-button md-raised">
+                            <md-icon>delete</md-icon>
+                        </md-button>
+                    </md-table-cell>
+                </md-table-row>
+            </md-table>
+            <div class="defects-pagination flex justify-between items-center">
+                <app-pagination
+                    @changePage="loadDefects($event)"
+                    v-if="paginateMeta"
+                    :current-page="paginateMeta.currentPage"
+                    :total-pages="paginateMeta.lastPage"/>
+                <div></div>
+                <span>total defects: {{ totalDefects }}</span>
+            </div>
+        </template>
+        <md-dialog-confirm
+            :md-active.sync="showDeleteConfirmation"
+            :md-content='`Do you whant delete defect "${deletedDefectData.name}"?`'
+            @md-cancel="cancelDelete"
+            @md-confirm="confirmDelete"
+            md-title="Delete defect"/>
         <create-defect
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
@@ -48,20 +63,30 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import CreatePopup from "@components/defects/CreationPopup";
 
 export default {
     components: { "create-defect": CreatePopup },
-    async fetch({ store }) {
+    async fetch({ store, route, redirect }) {
         try {
-            await store.dispatch("defects/loadDefects");
+            const { page } = route.query;
+            await store.dispatch("defects/loadDefects", page);
+            const { currentPage, lastPage } = store.state.defects.meta;
+            if(currentPage > lastPage) redirect({ name: 'devices-defects' });
         } catch (e) {
             dl.error(e);
         }
     },
     data() {
-        return { showCreatePopup: false };
+        return {
+            showCreatePopup: false,
+            showDeleteConfirmation: false,
+            deletedDefectData: {
+                id: null,
+                name: null
+            }
+        };
     },
     computed: {
         ...mapGetters("defects", { hasDefects: "hasDefects" }),
@@ -70,6 +95,48 @@ export default {
             totalDefects: (state) => state.meta.total,
             paginateMeta: (state) => state.meta
         })
+    },
+    methods: {
+        ...mapActions("defects", {
+            loadDefects: "loadDefects",
+            deleteDefect: "deleteDefect"
+        }),
+        removeConfimation({ id, name }) {
+            this.deletedDefectData.id = id;
+            this.deletedDefectData.name = name;
+            this.showDeleteConfirmation = true;
+        },
+        cancelDelete() {
+            this.deletedDefectData.id = null;
+            this.deletedDefectData.name = null;
+            this.showDeleteConfirmation = false;
+        },
+        confirmDelete() {
+            this.deleteDefect(this.deletedDefectData.id)
+                .then((defect) => {
+                    this.$notify({
+                        title: "Defect deleted",
+                        text: `Defect "${defect.name}" was deleted!`
+                    });
+                    this.redirectFromLastEmptyPage();
+                }).catch((e) => {
+                    dl.error(e);
+                    this.$notify({
+                        title: "Delete defect error",
+                        text: "Something went wrong!",
+                        type: "error"
+                    });
+                })
+                .finally(() => this.cancelDelete());
+        },
+        redirectFromLastEmptyPage() {
+            const currentPage = this.$route.query.page;
+            if(currentPage && Number(currentPage) > this.paginateMeta.lastPage) {
+                const { name } = this.$route;
+                this.$router.push({ name, query: { ...this.$route.query, page: this.paginateMeta.lastPage } });
+                this.loadDefects(this.paginateMeta.lastPage);
+            }
+        }
     }
 };
 </script>
@@ -83,5 +150,9 @@ export default {
         &--control:not(:last-child) {
             margin-right: 10px;
         }
+    }
+
+    .defects-pagination {
+        margin-top: 20px;
     }
 </style>

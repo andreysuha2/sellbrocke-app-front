@@ -6,7 +6,21 @@ export default {
         state.meta = camelizeObject(meta);
     },
     addDefect(state, defect) {
-        state.defects.push(defect);
-        state.meta.total++;
+        const { defects } = state;
+        defects.unshift(defect);
+        if(state.meta.total > state.meta.perPage) defects.splice(defects.length - 1, 1);
+    },
+    deleteDefect(state, id) {
+        const defectIndex = state.defects.findIndex((defect) => defect.id === id);
+        if(defectIndex !== -1) state.defects.splice(defectIndex, 1);
+    },
+    addNextDefect(state, defect) {
+        if(defect) state.defects.push(defect);
+    },
+    recalculateMeta(state, diff) {
+        const { meta } = state;
+        meta.total = meta.total + diff;
+        const expectedLastPage = Math.ceil(meta.total / meta.perPage);
+        if(expectedLastPage !== meta.lastPage) meta.lastPage = expectedLastPage;
     }
 };
