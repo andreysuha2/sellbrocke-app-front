@@ -14,6 +14,33 @@
                 @click="showCreatePopup = true"
                 class="md-primary md-raised">Create defect</md-button>
         </md-empty-state>
+        <md-table v-else class="defects-list">
+            <md-table-row>
+                <md-table-head class="defects-list--id" md-numeric>ID</md-table-head>
+                <md-table-head>Name</md-table-head>
+                <md-table-head>Price reduction</md-table-head>
+                <md-table-head>Description</md-table-head>
+                <md-table-head>Control</md-table-head>
+            </md-table-row>
+            <md-table-row v-for="defect in defectsList" :key="defect.id">
+                <md-table-cell class="merchants-list--id" md-numeric>{{ defect.id }}</md-table-cell>
+                <md-table-cell>{{ defect.name }}</md-table-cell>
+                <md-table-cell>{{ defect.priceReduction }}%</md-table-cell>
+                <md-table-cell>{{ defect.description }}</md-table-cell>
+                <md-table-cell>
+                    <md-button class="defects-list--control md-icon-button md-raised">
+                        <md-icon>edit</md-icon>
+                    </md-button>
+                    <md-button class="defects-list--control md-icon-button md-raised">
+                        <md-icon>delete</md-icon>
+                    </md-button>
+                </md-table-cell>
+            </md-table-row>
+        </md-table>
+        <app-pagination
+            always-arrows
+            :current-page="50"
+            :total-pages="50"/>
         <create-defect
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
@@ -40,8 +67,21 @@ export default {
         ...mapGetters("defects", { hasDefects: "hasDefects" }),
         ...mapState("defects", {
             defectsList: "defects",
-            totalDefects: (state) => state.meta.total
+            totalDefects: (state) => state.meta.total,
+            paginateMeta: (state) => state.meta
         })
     }
 };
 </script>
+
+<style lang="scss" scoped>
+    .defects-list {
+        &--id {
+            width: 100px;
+        }
+
+        &--control:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+</style>
