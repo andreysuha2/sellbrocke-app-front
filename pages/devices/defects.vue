@@ -29,7 +29,9 @@
                     <md-table-cell>{{ defect.priceReduction }}%</md-table-cell>
                     <md-table-cell>{{ defect.description }}</md-table-cell>
                     <md-table-cell>
-                        <md-button class="defects-list--control md-icon-button md-raised">
+                        <md-button
+                            @click="openUpdatePopup(defect.id)"
+                            class="defects-list--control md-icon-button md-raised">
                             <md-icon>edit</md-icon>
                         </md-button>
                         <md-button
@@ -59,15 +61,22 @@
         <create-defect
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
+        <update-defect
+            @closePopup="closeUpdatePopup"
+            :show-popup="showUpdatePopup"/>
     </app-page>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from "vuex";
+import { mapGetters, mapState, mapActions, mapMutations } from "vuex";
 import CreatePopup from "@components/defects/CreationPopup";
+import UpdatePopup from "@components/defects/UpdatePopup";
 
 export default {
-    components: { "create-defect": CreatePopup },
+    components: {
+        "create-defect": CreatePopup,
+        "update-defect": UpdatePopup
+    },
     async fetch({ store, route, redirect }) {
         try {
             const { page } = route.query;
@@ -90,6 +99,7 @@ export default {
     },
     computed: {
         ...mapGetters("defects", { hasDefects: "hasDefects" }),
+        ...mapGetters("defects/currentDefect", { showUpdatePopup: "hasDefect" }),
         ...mapState("defects", {
             defectsList: "defects",
             totalDefects: (state) => state.meta.total,
@@ -100,6 +110,10 @@ export default {
         ...mapActions("defects", {
             loadDefects: "loadDefects",
             deleteDefect: "deleteDefect"
+        }),
+        ...mapMutations("defects/currentDefect", {
+            openUpdatePopup: "setDefect",
+            closeUpdatePopup: "cancelDefect"
         }),
         removeConfimation({ id, name }) {
             this.deletedDefectData.id = id;

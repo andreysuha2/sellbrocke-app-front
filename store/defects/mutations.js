@@ -10,6 +10,10 @@ export default {
         defects.unshift(defect);
         if(state.meta.total > state.meta.perPage) defects.splice(defects.length - 1, 1);
     },
+    updateDefect(state, defectData) {
+        const defectIndex = state.defects.findIndex((defect) => defect.id === defectData.id);
+        if(defectIndex !== -1) state.defects.splice(defectIndex, 1, defectData);
+    },
     deleteDefect(state, id) {
         const defectIndex = state.defects.findIndex((defect) => defect.id === id);
         if(defectIndex !== -1) state.defects.splice(defectIndex, 1);

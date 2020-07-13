@@ -24,6 +24,16 @@ export default {
                 }).catch(e => reject(e));
         });
     },
+    updateDefect({ commit }, { id, data }) {
+        return new Promise((resolve, reject) => {
+            http.defect.update(id, data)
+                .then((resp) => {
+                    const { defect } = resp.data;
+                    commit("updateDefect", defect);
+                    resolve(defect);
+                }).catch((e) => reject(e));
+        });
+    },
     deleteDefect({ commit, getters }, id) {
         return new Promise((resolve, reject) => {
             http.defect.delete(id, { lastDefectId: getters.lastDefectId })

@@ -1,12 +1,13 @@
 <template>
     <md-dialog
-        class="create-defect"
-        @md-clicked-outside="$emit('closePopup')"
+        class="update-defect"
+        @md-clicked-outside="closePopup"
         :md-active="showPopup">
-        <md-dialog-title>Create defect</md-dialog-title>
+        <md-dialog-title>Update defect "{{ defectName }}"</md-dialog-title>
         <app-form
-            :on-submit="create"
-            form-name="create-defect">
+            v-if="defect"
+            :on-submit="update"
+            form-name="update-defect">
             <app-input
                 v-model="name"
                 required
@@ -30,11 +31,11 @@
                 validate-name="description"
                 validate-rules=""
                 display-error-name="company slug"
-                placeholder="Defect descrpition"/>
+                placeholder="Defect description"/>
             <div class="flex justify-between">
                 <md-button
                     type="submit"
-                    class="md-primary md-raised">Create</md-button>
+                    class="md-primary md-raised">Update</md-button>
                 <md-button
                     @click="$emit('closePopup')"
                     class="md-accent md-raised">Cancel</md-button>
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { decamelize } from "@helpers/functions";
 
 export default {
@@ -65,23 +66,29 @@ export default {
         };
     },
     computed: {
+        ...mapGetters("defects/currentDefect", { defect: "currentDefect" }),
+        ...mapState("defects/currentDefect", { id: "defectId" }),
+        defectName() { return this.defect ? this.defect.name : null; },
+        updateData() { return { id: this.id, data: this.formData }; },
+        // form props
         name: {
-            get() { return this.temp.name; },
+            get() { return this.temp.name ? this.temp.name : this.defect.name; },
             set(name) { this.setField("name", name); }
         },
         priceReduction: {
-            get() { return this.temp.priceReduction; },
+            get() { return this.temp.priceReduction ? this.temp.priceReduction : this.defect.priceReduction; },
             set(percent) { this.setField("priceReduction", percent); }
         },
         description: {
-            get() { return this.temp.description; },
+            get() { return this.temp.description !== null ? this.temp.description : this.defect.description; },
             set(desc) { this.setField("description", desc); }
         }
     },
     methods: {
-        ...mapActions("defects", { addDefect: "createDefect" }),
+        ...mapActions("defects", { updateDefect: "updateDefect" }),
         setField(name, value) {
-            if(this.temp.hasOwnProperty(name)) {
+            if(value === this.defect[name]) this.clearField(name);
+            else {
                 this.temp[name] = value;
                 this.formData.set(decamelize(name), value);
             }
@@ -100,13 +107,17 @@ export default {
             };
             this.formData = new FormData();
         },
-        create() {
+        closePopup() {
+            this.$emit("closePopup");
+            this.clearForm();
+        },
+        update() {
             return new Promise((resolve, reject) => {
-                this.addDefect(this.formData)
+                this.updateDefect(this.updateData)
                     .then((defect) => {
                         this.$notify({
-                            title: `Defect added`,
-                            text: `Defect ${defect.name} was created`,
+                            title: `Defect updated`,
+                            text: `Defect ${defect.name} was updated`,
                             duration: 3000
                         });
                         this.$emit("closePopup");
@@ -125,7 +136,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .create-defect /deep/ .md-dialog-container {
+    .update-defect /deep/ .md-dialog-container {
         padding: 20px;
         padding-top: 0;
         max-width: 500px;
