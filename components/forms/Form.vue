@@ -2,7 +2,13 @@
     <form @submit.prevent="submit"
         autocomplete="off"
         :data-vv-scope="formName">
-        <slot></slot>
+        <app-preloader
+            :active="preload"
+            :md-diameter="100"
+            :md-stroke="10"
+            md-mode="indeterminate">
+            <slot></slot>
+        </app-preloader>
     </form>
 </template>
 
@@ -26,6 +32,9 @@ export default {
             default: false
         }
     },
+    data() {
+        return { preload: false };
+    },
     provide() {
         return { formName: this.formName };
     },
@@ -47,7 +56,10 @@ export default {
         submited() {
             if(!this.onSubmit) dl.error("Undefined submit callback");
             else {
-                this.onSubmit().catch((e) => this.handleSubmitErrors(e));
+                this.preload = true;
+                this.onSubmit()
+                    .catch((e) => this.handleSubmitErrors(e))
+                    .finally(() => { this.preload = false; });
             }
         },
         handleSubmitErrors(e) {

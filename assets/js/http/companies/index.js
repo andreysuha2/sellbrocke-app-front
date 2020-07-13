@@ -5,7 +5,7 @@ class CompaniesHTTP extends Http {
         super({ slug: "companies" });
     }
 
-    getAll() {
+    getCompanies() {
         return this.query.get();
     }
 

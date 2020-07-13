@@ -7,5 +7,6 @@ module.exports = [
     "MdDialog",
     "MdDialogConfirm",
     "MdEmptyState",
-    "MdCard"
+    "MdCard",
+    "MdProgress"
 ];

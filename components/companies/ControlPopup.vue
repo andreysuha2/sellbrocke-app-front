@@ -1,6 +1,6 @@
 <template>
     <md-dialog
-        class="create-company"
+        class="control-company"
         @md-clicked-outside="$emit('closePopup')"
         @md-closed="clearForm"
         :md-active="showPopup">
@@ -9,7 +9,7 @@
             <app-form
                 ref="updateForm"
                 :on-submit="update"
-                form-name="create-company">
+                form-name="control-company">
                 <app-file
                     v-model="logo"
                     required
@@ -186,7 +186,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .create-company /deep/ .md-dialog-container {
+    .control-company /deep/ .md-dialog-container {
         padding: 20px;
         padding-top: 0;
         max-width: 500px;

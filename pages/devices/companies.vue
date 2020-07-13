@@ -5,28 +5,26 @@
                 @click="showCreatePopup = true"
                 class="md-primary md-raised">Add new</md-button>
         </template>
-        <div>
-            <md-empty-state
-                v-if="!hasCompanies"
-                md-icon="business"
-                md-label="Create your first company"
-                md-description="You cant create devices without company">
-                <md-button
-                    @click="showCreatePopup = true"
-                    class="md-primary md-raised">Create company</md-button>
-            </md-empty-state>
-            <div v-else class="companies">
-                <div
-                    v-for="(companies, i) in companiesLists"
-                    :key="i"
-                    class="companies--row flex flex-wrap">
-                    <company-card
-                        class="companies--card"
-                        v-for="company in companies"
-                        :key="company.id"
-                        @click.native="selectCompany(company.id)"
-                        v-bind="company"/>
-                </div>
+        <md-empty-state
+            v-if="!hasCompanies"
+            md-icon="business"
+            md-label="Create your first company"
+            md-description="You cant create devices without company">
+            <md-button
+                @click="showCreatePopup = true"
+                class="md-primary md-raised">Create company</md-button>
+        </md-empty-state>
+        <div v-else class="companies">
+            <div
+                v-for="(companies, i) in companiesLists"
+                :key="i"
+                class="companies--row flex flex-wrap">
+                <company-card
+                    class="companies--card"
+                    v-for="company in companies"
+                    :key="company.id"
+                    @click.native="selectCompany(company.id)"
+                    v-bind="company"/>
             </div>
         </div>
         <create-company

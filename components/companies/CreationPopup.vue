@@ -53,6 +53,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import { decamelize } from "@helpers/functions";
 
 export default {
     props: {
@@ -86,7 +87,7 @@ export default {
         },
         priceReduction: {
             get() { return this.temp.priceReduction; },
-            set(percent) { this.setField("priceReduction", percent, "price_reduction"); }
+            set(percent) { this.setField("priceReduction", percent); }
         },
         slug: {
             get() { return this.temp.slug; },
@@ -95,17 +96,16 @@ export default {
     },
     methods: {
         ...mapActions("companies", { addCompany: "createCompany" }),
-        setField(name, value, formName = null) {
+        setField(name, value) {
             if(this.temp.hasOwnProperty(name)) {
                 this.temp[name] = value;
-                if(!formName) formName = name;
-                this.formData.set(formName, value);
+                this.formData.set(decamelize(name), value);
             }
         },
         clearField(name, value = null) {
             if(this.temp.hasOwnProperty(name)) {
                 this.temp[name] = value;
-                this.formData.delete(name);
+                this.formData.delete(decamelize(name));
             }
         },
         clearForm() {

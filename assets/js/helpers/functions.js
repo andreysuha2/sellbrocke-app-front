@@ -13,6 +13,10 @@ export function debounce(handler, ms, immediate = false) {
     };
 }
 
+export function isObject(data) {
+    return !Array.isArray(data) && data !== null && typeof data === "object";
+}
+
 // camelize
 export function camelize(str) {
     if(typeof str !== "string") throw new Error("toCamelCase error: argument str must be typeof string");
@@ -20,6 +24,14 @@ export function camelize(str) {
         if(p2) return p2.toUpperCase();
         return p1.toLowerCase();
     });
+}
+
+export function camelizeObject(obj) {
+    return Object.fromEntries(Object.entries(obj).map((item) => {
+        const prop = camelize(item[0]),
+            value = isObject(item[1]) ? camelizeObject(item[1]) : item[1];
+        return [ prop, value ];
+    }));
 }
 
 //decamelize

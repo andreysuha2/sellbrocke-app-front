@@ -42,12 +42,17 @@ export default {
             }
         }
     },
+    computed: {
+        canOpen() {
+            return this.link !== "#" && (!this.children || this.subOpen);
+        }
+    },
     methods: {
         closeSub() {
             this.subOpen = false;
         },
         navigate() {
-            if(this.link !== "#" && this.subOpen) this.$router.push({ name: this.link });
+            if(this.canOpen) this.$router.push({ name: this.link });
             this.subOpen = !this.subOpen;
         }
     }
