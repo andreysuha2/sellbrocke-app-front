@@ -92,7 +92,8 @@ module.exports = {
                 "@templates": path.resolve(__dirname, "./components/templates"),
                 "@helpers": path.resolve(__dirname, "./assets/js/helpers"),
                 "@http": path.resolve(__dirname, "./assets/js/http"),
-                "@auth": path.resolve(__dirname, "./assets/js/auth")
+                "@auth": path.resolve(__dirname, "./assets/js/auth"),
+                "@mixins": path.resolve(__dirname, "./mixins")
             };
 
             Object.assign(config.resolve.alias, aliases);

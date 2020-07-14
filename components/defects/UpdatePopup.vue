@@ -1,11 +1,11 @@
 <template>
     <md-dialog
-        class="update-defect"
+        class="control-popup"
         @md-clicked-outside="closePopup"
         :md-active="showPopup">
         <md-dialog-title>Update defect "{{ defectName }}"</md-dialog-title>
         <app-form
-            v-if="defect"
+            v-if="storeData"
             :on-submit="update"
             form-name="update-defect">
             <app-input
@@ -46,18 +46,12 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import { decamelize } from "@helpers/functions";
+import popupMixin from "@mixins/ControlPopup";
 
 export default {
-    props: {
-        showPopup: {
-            type: Boolean,
-            default: false
-        }
-    },
+    mixins: [ popupMixin ],
     data() {
         return {
-            formData: null,
             temp: {
                 name: null,
                 priceReduction: null,
@@ -66,47 +60,26 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("defects/currentDefect", { defect: "currentDefect" }),
+        ...mapGetters("defects/currentDefect", { storeData: "currentDefect" }),
         ...mapState("defects/currentDefect", { id: "defectId" }),
-        defectName() { return this.defect ? this.defect.name : null; },
+        defectName() { return this.storeData ? this.storeData.name : null; },
         updateData() { return { id: this.id, data: this.formData }; },
         // form props
         name: {
-            get() { return this.temp.name ? this.temp.name : this.defect.name; },
+            get() { return this.temp.name ? this.temp.name : this.storeData.name; },
             set(name) { this.setField("name", name); }
         },
         priceReduction: {
-            get() { return this.temp.priceReduction ? this.temp.priceReduction : this.defect.priceReduction; },
+            get() { return this.temp.priceReduction ? this.temp.priceReduction : this.storeData.priceReduction; },
             set(percent) { this.setField("priceReduction", percent); }
         },
         description: {
-            get() { return this.temp.description !== null ? this.temp.description : this.defect.description; },
+            get() { return this.temp.description !== null ? this.temp.description : this.storeData.description; },
             set(desc) { this.setField("description", desc); }
         }
     },
     methods: {
         ...mapActions("defects", { updateDefect: "updateDefect" }),
-        setField(name, value) {
-            if(value === this.defect[name]) this.clearField(name);
-            else {
-                this.temp[name] = value;
-                this.formData.set(decamelize(name), value);
-            }
-        },
-        clearField(name, value = null) {
-            if(this.temp.hasOwnProperty(name)) {
-                this.temp[name] = value;
-                this.formData.delete(decamelize(name));
-            }
-        },
-        clearForm() {
-            this.temp = {
-                name: null,
-                priceReduction: null,
-                description: null
-            };
-            this.formData = new FormData();
-        },
         closePopup() {
             this.$emit("closePopup");
             this.clearForm();
@@ -126,20 +99,8 @@ export default {
                     }).catch((e) => reject(e));
             });
         }
-    },
-    created() {
-        if(process.client) {
-            this.formData = new FormData();
-        }
     }
 };
 </script>
 
-<style lang="scss" scoped>
-    .update-defect /deep/ .md-dialog-container {
-        padding: 20px;
-        padding-top: 0;
-        max-width: 500px;
-        width: 100%;
-    }
-</style>
+<style lang="scss" src="@mixins/ControlPopup/main.scss"></style>

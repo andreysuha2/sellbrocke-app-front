@@ -1,6 +1,6 @@
 <template>
 <md-dialog
-    class="create-company"
+    class="control-popup"
     @md-clicked-outside="$emit('closePopup')"
     :md-active="showPopup">
     <md-dialog-title>Create company</md-dialog-title>
@@ -36,7 +36,7 @@
             v-model="slug"
             required
             validate-name="slug"
-            validate-rules="required"
+            validate-rules="required|alpha_dash"
             display-error-name="company slug"
             placeholder="Company slug"/>
         <div class="flex justify-between">
@@ -53,18 +53,12 @@
 
 <script>
 import { mapActions } from "vuex";
-import { decamelize } from "@helpers/functions";
+import popupMixin from "@mixins/ControlPopup";
 
 export default {
-    props: {
-        showPopup: {
-            type: Boolean,
-            default: false
-        }
-    },
+    mixins: [ popupMixin ],
     data() {
         return {
-            formData: null,
             temp: {
                 logo: null,
                 name: null,
@@ -96,27 +90,6 @@ export default {
     },
     methods: {
         ...mapActions("companies", { addCompany: "createCompany" }),
-        setField(name, value) {
-            if(this.temp.hasOwnProperty(name)) {
-                this.temp[name] = value;
-                this.formData.set(decamelize(name), value);
-            }
-        },
-        clearField(name, value = null) {
-            if(this.temp.hasOwnProperty(name)) {
-                this.temp[name] = value;
-                this.formData.delete(decamelize(name));
-            }
-        },
-        clearForm() {
-            this.temp = {
-                logo: null,
-                name: null,
-                priceReduction: null,
-                slug: null
-            };
-            this.formData = new FormData();
-        },
         create() {
             return new Promise((resolve, reject) => {
                 this.addCompany(this.formData)
@@ -132,20 +105,8 @@ export default {
                     }).catch((e) => reject(e));
             });
         }
-    },
-    created() {
-        if(process.client) {
-            this.formData = new FormData();
-        }
     }
 };
 </script>
 
-<style lang="scss" scoped>
-.create-company /deep/ .md-dialog-container {
-    padding: 20px;
-    padding-top: 0;
-    max-width: 500px;
-    width: 100%;
-}
-</style>
+<style lang="scss" src="@mixins/ControlPopup/main.scss"></style>

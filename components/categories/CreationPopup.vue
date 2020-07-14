@@ -3,34 +3,37 @@
         class="control-popup"
         @md-clicked-outside="$emit('closePopup')"
         :md-active="showPopup">
-        <md-dialog-title>Create defect</md-dialog-title>
+        <md-dialog-title>Create category</md-dialog-title>
         <app-form
             :on-submit="create"
-            form-name="create-defect">
+            form-name="create-category">
+            <app-file
+                v-model="thumbnail"
+                required
+                accept="image/*"
+                validate-name="thumbnail"
+                display-error-name="category thumbnail"
+                placeholder="Category thumbnail"/>
             <app-input
                 v-model="name"
                 required
                 validate-name="name"
                 validate-rules="required"
-                display-error-name="defect name"
-                placeholder="Defect name"/>
+                display-error-name="category name"
+                placeholder="Category name"/>
             <app-input
-                v-model="priceReduction"
-                type="number"
-                min="0"
-                max="100"
-                step=".01"
+                v-model="slug"
                 required
-                validate-name="price_reduction"
-                validate-rules="required|decimal:2|between:0,100"
-                display-error-name="price reduction"
-                placeholder="Price reduction"/>
+                validate-name="slug"
+                validate-rules="required|alpha_dash"
+                display-error-name="slug"
+                placeholder="Category slug"/>
             <app-textarea
                 v-model="description"
                 validate-name="description"
                 validate-rules=""
-                display-error-name="defect description"
-                placeholder="Defect description"/>
+                display-error-name="company description"
+                placeholder="Category description"/>
             <div class="flex justify-between">
                 <md-button
                     type="submit"
@@ -52,20 +55,28 @@ export default {
     data() {
         return {
             temp: {
+                thumbnail: null,
                 name: null,
-                priceReduction: null,
+                slug: null,
                 description: null
             }
         };
     },
     computed: {
+        thumbnail: {
+            get() { return this.temp.thumbnail; },
+            set(thumbnail) {
+                if(thumbnail[0]) this.setField("thumbnail", thumbnail[0]);
+                else this.clearField(thumbnail);
+            }
+        },
         name: {
             get() { return this.temp.name; },
             set(name) { this.setField("name", name); }
         },
-        priceReduction: {
-            get() { return this.temp.priceReduction; },
-            set(percent) { this.setField("priceReduction", percent); }
+        slug: {
+            get() { return this.temp.slug; },
+            set(slug) { this.setField("slug", slug); }
         },
         description: {
             get() { return this.temp.description; },
@@ -73,19 +84,19 @@ export default {
         }
     },
     methods: {
-        ...mapActions("defects", { addDefect: "createDefect" }),
+        ...mapActions("categories", { addCategory: "createCategory" }),
         create() {
             return new Promise((resolve, reject) => {
-                this.addDefect(this.formData)
-                    .then((defect) => {
+                this.addCategory({ data: this.formData })
+                    .then((category) => {
                         this.$notify({
-                            title: `Defect added`,
-                            text: `Defect ${defect.name} was created`,
+                            title: `Category added`,
+                            text: `Category ${category.name} was created`,
                             duration: 3000
                         });
                         this.$emit("closePopup");
                         this.clearForm();
-                        resolve(defect);
+                        resolve(category);
                     }).catch((e) => reject(e));
             });
         }
