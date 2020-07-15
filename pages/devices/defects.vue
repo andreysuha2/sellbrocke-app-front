@@ -27,7 +27,9 @@
                     <md-table-cell class="defects-list--id" md-numeric>{{ defect.id }}</md-table-cell>
                     <md-table-cell>{{ defect.name }}</md-table-cell>
                     <md-table-cell>{{ defect.priceReduction }}%</md-table-cell>
-                    <md-table-cell>{{ defect.description }}</md-table-cell>
+                    <md-table-cell>
+                        <p class="defects-list--description">{{ defect.description }}</p>
+                    </md-table-cell>
                     <md-table-cell>
                         <md-button
                             @click="openUpdatePopup(defect.id)"
@@ -163,6 +165,11 @@ export default {
 
         &--control:not(:last-child) {
             margin-right: 10px;
+        }
+
+        &--description {
+            margin: 0;
+            max-width: 800px;
         }
     }
 
