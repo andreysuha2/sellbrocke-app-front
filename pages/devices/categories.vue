@@ -17,7 +17,9 @@
         <template v-else>
             <categories-breadcrumbs
                 class="categories--breadcrumbs"/>
-            <md-table class="categories-list">
+            <current-category v-if="isSelectCategory"
+                class="categories--current"/>
+            <md-table v-if="hasCategories" class="categories-list">
                 <md-table-row>
                     <md-table-head class="categories-list--id" md-numeric>ID</md-table-head>
                     <md-table-head>Thumbnail</md-table-head>
@@ -62,6 +64,7 @@
 <script>
 import CreationPopup from "@components/categories/CreationPopup";
 import Breadcrumbs from "@components/categories/Breadcrumbs";
+import CurrentCategory from "@components/categories/CurrentCategory";
 import NavigatorMixin from "@mixins/categories/Navigator";
 import { mapState, mapGetters } from "vuex";
 
@@ -79,7 +82,8 @@ export default {
     watchQuery: [ "category" ],
     components: {
         "create-category": CreationPopup,
-        "categories-breadcrumbs": Breadcrumbs
+        "categories-breadcrumbs": Breadcrumbs,
+        "current-category": CurrentCategory
     },
     data() {
         return { showCreatePopup: false };
@@ -101,7 +105,11 @@ export default {
 <style lang="scss" scoped>
     .categories {
         &--breadcrumbs {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        &--current {
+            margin-bottom: 40px;
         }
     }
 
