@@ -1,6 +1,7 @@
 <template>
     <md-dialog
         class="control-popup"
+        @md-closed="clearForm"
         @md-clicked-outside="$emit('closePopup')"
         :md-active="showPopup">
         <md-dialog-title>Create category</md-dialog-title>

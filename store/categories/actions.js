@@ -31,7 +31,7 @@ export default {
     },
     createCategory({ state, commit }, data) {
         return new Promise((resolve, reject) => {
-            const { id: parentId } = state.currentCategory;
+            const parentId = state.currentCategory ? state.currentCategory.id : null;
             http.category.create(data, parentId)
                 .then((resp) => {
                     const { category } = resp.data;

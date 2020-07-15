@@ -36,12 +36,15 @@ export default {
             }
         },
         clearForm() {
-            this.temp = this.tempDefault;
+            this.setTemp();
             this.formData = new FormData();
+        },
+        setTemp() {
+            this.temp = JSON.parse(JSON.stringify(this.tempDefault));
         }
     },
     created() {
-        this.temp = this.tempDefault;
+        this.setTemp();
         if(process.client) {
             this.formData = new FormData();
         }
