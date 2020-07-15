@@ -59,7 +59,7 @@ export default {
     mixins: [ popupMixin ],
     data() {
         return {
-            temp: {
+            tempDefault: {
                 logo: null,
                 name: null,
                 priceReduction: null,

@@ -1,4 +1,5 @@
 export default () => ({
     categories: null,
-    currentCategory: null
+    currentCategory: null,
+    defectsList: null
 });

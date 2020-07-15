@@ -8,5 +8,8 @@ module.exports = [
     "MdDialogConfirm",
     "MdEmptyState",
     "MdCard",
-    "MdProgress"
+    "MdProgress",
+    "MdMenu",
+    "MdList",
+    "MdCheckbox"
 ];

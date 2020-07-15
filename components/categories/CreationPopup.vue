@@ -28,6 +28,21 @@
                 validate-rules="required|alpha_dash"
                 display-error-name="slug"
                 placeholder="Category slug"/>
+            <app-select
+                required
+                multiple
+                v-model="relatedDefects"
+                validate-name="defects"
+                validate-rules="required"
+                placeholder="Related defects"
+                display-error-name="related defects">
+                <md-option
+                    :key="defect.id"
+                    :value="defect.id"
+                    v-for="defect in defects">
+                    {{ defect.name }}
+                </md-option>
+            </app-select>
             <app-textarea
                 v-model="description"
                 validate-name="description"
@@ -47,22 +62,28 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import popupMixin from "@mixins/ControlPopup";
 
 export default {
     mixins: [ popupMixin ],
     data() {
         return {
-            temp: {
+            tempDefault: {
                 thumbnail: null,
                 name: null,
                 slug: null,
-                description: null
+                description: null,
+                defects: []
             }
         };
     },
     computed: {
+        ...mapState("categories", { defects: "defectsList" }),
+        relatedDefects: {
+            get() { return this.temp.defects; },
+            set(defects) { this.setField("defects", defects, true); }
+        },
         thumbnail: {
             get() { return this.temp.thumbnail; },
             set(thumbnail) {

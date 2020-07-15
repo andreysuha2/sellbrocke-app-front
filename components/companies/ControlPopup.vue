@@ -75,7 +75,7 @@ export default {
     data() {
         return {
             showDeleteConfirmation: false,
-            temp: {
+            tempDefault: {
                 logo: null,
                 name: null,
                 priceReduction: null,

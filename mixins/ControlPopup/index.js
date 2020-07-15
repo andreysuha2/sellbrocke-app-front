@@ -8,7 +8,10 @@ export default {
         }
     },
     data() {
-        return { formData: null };
+        return {
+            formData: null,
+            temp: null
+        };
     },
     computed: {
         hasUpdate() {
@@ -16,27 +19,29 @@ export default {
         }
     },
     methods: {
-        setField(name, value) {
+        setField(name, value, asString = false) {
             if(this.temp.hasOwnProperty(name)) {
                 if(this.storeData && value === this.storeData[name]) this.clearField(name);
                 else {
                     this.temp[name] = value;
+                    if(asString) value = JSON.stringify(value);
                     this.formData.set(decamelize(name), value);
                 }
             }
         },
         clearField(name, value = null) {
             if(this.temp.hasOwnProperty(name)) {
-                this.temp[name] = value;
+                this.temp[name] = value || this.tempDefault[name];
                 this.formData.delete(decamelize(name));
             }
         },
         clearForm() {
-            for(let key in this.temp) this.temp[key] = null;
+            this.temp = this.tempDefault;
             this.formData = new FormData();
         }
     },
     created() {
+        this.temp = this.tempDefault;
         if(process.client) {
             this.formData = new FormData();
         }

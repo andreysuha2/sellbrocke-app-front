@@ -5,8 +5,9 @@ export default {
         return new Promise((resolve, reject) => {
             http.getCategories()
                 .then((resp) => {
-                    const { categories } = resp.data;
+                    const { categories, defects } = resp.data;
                     commit("setCategories", categories);
+                    commit("setDefects", defects);
                     resolve(categories);
                 }).catch((e) => reject(e));
         });
