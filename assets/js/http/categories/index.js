@@ -14,7 +14,8 @@ class CategoriesHTTP extends Http {
             create(data, parentId = null) {
                 const path = parentId || "";
                 return query.post(`${path}`, data);
-            }
+            },
+            read: (id, withDefects) => query.get(`${id}`, { params: { withDefects } })
         }));
     }
 }

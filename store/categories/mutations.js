@@ -8,7 +8,8 @@ export default {
     addCategory(state, category) {
         state.categories.unshift(category);
     },
-    setCurrentCategory(state, category) {
+    setCurrentCategory(state, { category, path: breadcrumbs }) {
         state.currentCategory = category;
+        state.breadcrumbs = [ state.breadcrumbs[0], ...breadcrumbs ];
     }
 };

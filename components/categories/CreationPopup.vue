@@ -79,7 +79,12 @@ export default {
         };
     },
     computed: {
-        ...mapState("categories", { defects: "defectsList" }),
+        ...mapState("categories", {
+            defects: "defectsList",
+            parentSlug(state) {
+                return state.currentCategory ? `${state.currentCategory.slug}/` : "";
+            }
+        }),
         relatedDefects: {
             get() { return this.temp.defects; },
             set(defects) { this.setField("defects", defects, true); }
@@ -96,8 +101,8 @@ export default {
             set(name) { this.setField("name", name); }
         },
         slug: {
-            get() { return this.temp.slug; },
-            set(slug) { this.setField("slug", slug); }
+            get() { return this.temp.slug ? this.temp.slug.split("/").reverse()[0] : null; },
+            set(slug) { this.setField("slug", `${this.parentSlug}${slug}`); }
         },
         description: {
             get() { return this.temp.description; },
@@ -108,7 +113,7 @@ export default {
         ...mapActions("categories", { addCategory: "createCategory" }),
         create() {
             return new Promise((resolve, reject) => {
-                this.addCategory({ data: this.formData })
+                this.addCategory(this.formData)
                     .then((category) => {
                         this.$notify({
                             title: `Category added`,
