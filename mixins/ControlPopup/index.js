@@ -23,6 +23,7 @@ export default {
             if(this.temp.hasOwnProperty(name)) {
                 if(this.storeData && value === this.storeData[name]) this.clearField(name);
                 else {
+                    dl.log(name, value);
                     this.temp[name] = value;
                     if(asString) value = JSON.stringify(value);
                     this.formData.set(decamelize(name), value);

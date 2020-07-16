@@ -38,7 +38,7 @@
                     <md-table-cell>{{ category.name }}</md-table-cell>
                     <md-table-cell>
                         <span class="categories-list--defect" v-for="defect in category.defects"
-                            :key="defect.id">{{ defect.name }}</span>
+                            :key="`${category.id}.${defect.id}`">{{ defect.name }}</span>
                     </md-table-cell>
                     <md-table-cell>{{ category.description }}</md-table-cell>
                     <md-table-cell>

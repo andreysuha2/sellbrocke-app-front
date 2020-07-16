@@ -74,7 +74,9 @@ export default {
                 name: null,
                 slug: null,
                 description: null,
-                defects: []
+                defects: [],
+                attachDefects: [],
+                detachDefects: []
             }
         };
     },
@@ -89,11 +91,19 @@ export default {
                 return slug ? `${slug}/` : "";
             }
         }),
+        existDefects() {
+            return this.storeData.defects.map((defect) => defect.id);
+        },
         relatedDefects: {
-            get() {
-                return this.temp.defects.length ? this.temp.defects : this.storeData.defects.map((defect) => defect.id);
-            },
-            set(defects) { this.setField("defects", defects, true); }
+            get() { return this.temp.defects.length ? this.temp.defects : this.existDefects; },
+            set(defects) {
+                this.temp.defects = defects;
+                const { attached, detached } = this.defectsResolve(defects);
+                if(attached) this.setField("attachDefects", attached, true);
+                else this.clearField("attachDefects");
+                if(detached) this.setField("detachDefects", detached, true);
+                else this.clearField("detachDefects");
+            }
         },
         thumbnail: {
             get() { return this.temp.thumbnail || this.storeData.thumbnail; },
@@ -120,6 +130,19 @@ export default {
     },
     methods: {
         ...mapActions("categories", { updateCategory: "updateCategory" }),
+        defectsResolve(newDefects) {
+            const resolver = (acc, checkIn) => acc.reduce((defects, defect) => {
+                if(!checkIn.includes(defect)) {
+                    if(!defects) defects = [];
+                    defects.push(defect);
+                }
+                return defects;
+            }, null);
+            return {
+                attached: resolver(newDefects, this.existDefects),
+                detached: resolver(this.existDefects, newDefects)
+            };
+        },
         update() {
             return new Promise((resolve, reject) => {
                 this.updateCategory(this.formData)
