@@ -12,6 +12,12 @@ export default {
     setCurrentCategory(state, category) {
         state.currentCategory = category;
     },
+    removeCategory(state, id) {
+        if(state.categories) {
+            const categoryIndex = state.categories.findIndex((category) => category.id === id);
+            if(categoryIndex !== -1) state.categories.splice(categoryIndex, 1);
+        }
+    },
     setBreadcrumbs(state, breadcrumbs) {
         state.breadcrumbs = [ state.breadcrumbs[0], ...breadcrumbs ];
     }

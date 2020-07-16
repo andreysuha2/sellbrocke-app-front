@@ -48,6 +48,7 @@
                 @click="showUpdatePopup = true"
                 class="md-button md-primary md-raised">update</md-button>
             <md-button
+                @click="$emit('removeCategory', category.id)"
                 class="md-button md-accent md-raised">delete</md-button>
         </div>
         <update-category

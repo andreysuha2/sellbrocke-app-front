@@ -19,7 +19,8 @@ class CategoriesHTTP extends Http {
             update(id, data) {
                 data.set("_method", "PUT");
                 return query.post(`${id}`, data);
-            }
+            },
+            delete: (id) => query.delete(`${id}`)
         }));
     }
 }

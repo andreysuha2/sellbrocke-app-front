@@ -6,6 +6,7 @@ module.exports = [
     "MdContent",
     "MdDialog",
     "MdDialogConfirm",
+    "MdDialogAlert",
     "MdEmptyState",
     "MdCard",
     "MdProgress",

@@ -18,6 +18,7 @@
             <categories-breadcrumbs
                 class="categories--breadcrumbs"/>
             <current-category v-if="isSelectCategory"
+                @removeCategory="deleteCategoryConfirm($event)"
                 class="categories--current"/>
             <md-table v-if="hasCategories" class="categories-list">
                 <md-table-row>
@@ -48,6 +49,7 @@
                             <md-icon>edit</md-icon>
                         </md-button>
                         <md-button
+                            @click="deleteCategoryConfirm(category.id)"
                             class="categories-list--control md-icon-button md-raised">
                             <md-icon>delete</md-icon>
                         </md-button>
@@ -58,6 +60,17 @@
         <create-category
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
+        <md-dialog-alert
+            :md-active.sync="deleteData.showAlert"
+            md-content="You cant remove category with child categories and attached devices!"/>
+        <md-dialog-confirm
+            :md-active.sync="deleteData.showConfirm"
+            md-title='Remove category'
+            :md-content='`Do you whant remove category "${deleteData.name}"?`'
+            md-confirm-text="Remove"
+            md-cancel-text="Cancel"
+            @md-cancel="clearDelete"
+            @md-confirm="deleteCategory" />
     </app-page>
 </template>
 
@@ -66,7 +79,7 @@ import CreationPopup from "@components/categories/CreationPopup";
 import Breadcrumbs from "@components/categories/Breadcrumbs";
 import CurrentCategory from "@components/categories/CurrentCategory";
 import NavigatorMixin from "@mixins/categories/Navigator";
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
     mixins: [ NavigatorMixin ],
@@ -87,7 +100,15 @@ export default {
         "current-category": CurrentCategory
     },
     data() {
-        return { showCreatePopup: false };
+        return {
+            showCreatePopup: false,
+            deleteData: {
+                showAlert: false,
+                showConfirm: false,
+                id: null,
+                name: null
+            }
+        };
     },
     computed: {
         ...mapState("categories", {
@@ -99,6 +120,51 @@ export default {
             isSelectCategory: "isCategorySelected",
             isEmpty: "isEmpty"
         })
+    },
+    methods: {
+        ...mapActions("categories", { remove: "deleteCategory" }),
+        deleteCategoryConfirm(id) {
+            let category = null;
+            if(this.category && this.category.id === id) category = this.category;
+            else category = this.categories.find((category) => category.id === id);
+            if(category) {
+                // TODO: check related devices
+                if(category.descendantsCount) this.deleteData.showAlert = true;
+                else {
+                    this.deleteData.id = category.id;
+                    this.deleteData.name = category.name;
+                    this.deleteData.showConfirm = true;
+                }
+            }
+        },
+        deleteCategory() {
+            this.remove(this.deleteData.id)
+                .then((category) => {
+                    if(this.category && category.id === this.category.id) {
+                        this.$router.push({ name: "devices-categories" });
+                    } else {
+                        this.$notify({
+                            title: "Category deleted",
+                            text: `Category ${category.name} was deleted`,
+                            duration: 3000
+                        });
+                    }
+                })
+                .catch(e => {
+                    dl.error(e);
+                    // TODO make plugin to display server errors
+                    this.$notify({
+                        title: "Error",
+                        text: "Something was wrone",
+                        duration: 3000
+                    });
+                });
+        },
+        clearDelete() {
+            this.deleteData.showConfirm = false;
+            this.deleteData.id = null;
+            this.deleteData.name = null;
+        }
     }
 };
 </script>

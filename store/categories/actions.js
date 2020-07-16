@@ -52,5 +52,16 @@ export default {
                     resolve(category);
                 }).catch((e) => reject(e));
         });
+    },
+    deleteCategory({ commit }, id) {
+        return new Promise((resolve, reject) => {
+            http.category.delete(id)
+                .then((resp) => {
+                    const { category } = resp.data;
+                    commit("removeCategory", category.id);
+                    resolve(category);
+                })
+                .catch((e) => reject(e));
+        });
     }
 };
