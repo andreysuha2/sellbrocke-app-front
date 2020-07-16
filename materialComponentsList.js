@@ -6,7 +6,11 @@ module.exports = [
     "MdContent",
     "MdDialog",
     "MdDialogConfirm",
+    "MdDialogAlert",
     "MdEmptyState",
     "MdCard",
-    "MdProgress"
+    "MdProgress",
+    "MdMenu",
+    "MdList",
+    "MdCheckbox"
 ];

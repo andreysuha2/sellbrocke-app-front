@@ -1,6 +1,6 @@
 <template>
     <md-dialog
-        class="create-defect"
+        class="control-popup"
         @md-clicked-outside="$emit('closePopup')"
         :md-active="showPopup">
         <md-dialog-title>Create defect</md-dialog-title>
@@ -29,8 +29,8 @@
                 v-model="description"
                 validate-name="description"
                 validate-rules=""
-                display-error-name="company slug"
-                placeholder="Defect descrpition"/>
+                display-error-name="defect description"
+                placeholder="Defect description"/>
             <div class="flex justify-between">
                 <md-button
                     type="submit"
@@ -45,19 +45,13 @@
 
 <script>
 import { mapActions } from "vuex";
-import { decamelize } from "@helpers/functions";
+import popupMixin from "@mixins/ControlPopup";
 
 export default {
-    props: {
-        showPopup: {
-            type: Boolean,
-            default: false
-        }
-    },
+    mixins: [ popupMixin ],
     data() {
         return {
-            formData: null,
-            temp: {
+            tempDefault: {
                 name: null,
                 priceReduction: null,
                 description: null
@@ -80,26 +74,6 @@ export default {
     },
     methods: {
         ...mapActions("defects", { addDefect: "createDefect" }),
-        setField(name, value) {
-            if(this.temp.hasOwnProperty(name)) {
-                this.temp[name] = value;
-                this.formData.set(decamelize(name), value);
-            }
-        },
-        clearField(name, value = null) {
-            if(this.temp.hasOwnProperty(name)) {
-                this.temp[name] = value;
-                this.formData.delete(decamelize(name));
-            }
-        },
-        clearForm() {
-            this.temp = {
-                name: null,
-                priceReduction: null,
-                description: null
-            };
-            this.formData = new FormData();
-        },
         create() {
             return new Promise((resolve, reject) => {
                 this.addDefect(this.formData)
@@ -115,20 +89,8 @@ export default {
                     }).catch((e) => reject(e));
             });
         }
-    },
-    created() {
-        if(process.client) {
-            this.formData = new FormData();
-        }
     }
 };
 </script>
 
-<style lang="scss" scoped>
-    .create-defect /deep/ .md-dialog-container {
-        padding: 20px;
-        padding-top: 0;
-        max-width: 500px;
-        width: 100%;
-    }
-</style>
+<style lang="scss" src="@mixins/ControlPopup/main.scss"></style>

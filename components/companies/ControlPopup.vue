@@ -1,11 +1,11 @@
 <template>
     <md-dialog
-        class="control-company"
+        class="control-popup"
         @md-clicked-outside="$emit('closePopup')"
         @md-closed="clearForm"
         :md-active="showPopup">
         <template v-if="hasCompany">
-            <md-dialog-title>Control company {{ company.name }}</md-dialog-title>
+            <md-dialog-title>Control company {{ storeData.name }}</md-dialog-title>
             <app-form
                 ref="updateForm"
                 :on-submit="update"
@@ -39,7 +39,7 @@
                     v-model="slug"
                     required
                     validate-name="slug"
-                    validate-rules="required"
+                    validate-rules="required|alpha_dash"
                     display-error-name="company slug"
                     placeholder="Company slug"/>
                 <div class="flex justify-between">
@@ -58,7 +58,7 @@
             <md-dialog-confirm
                 :md-active.sync="showDeleteConfirmation"
                 md-title="Delete company"
-                :md-content="`Do you whant remove company ${company.name}?`"
+                :md-content="`Do you whant remove company ${storeData.name}?`"
                 md-confirm-text="Delete"
                 md-cancel-text="Cancel"
                 @md-confirm="remove"/>
@@ -68,20 +68,14 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { decamelize } from "@helpers/functions";
+import popupMixin from "@mixins/ControlPopup";
 
 export default {
-    props: {
-        showPopup: {
-            type: Boolean,
-            default: false
-        }
-    },
+    mixins: [ popupMixin ],
     data() {
         return {
-            formData: null,
             showDeleteConfirmation: false,
-            temp: {
+            tempDefault: {
                 logo: null,
                 name: null,
                 priceReduction: null,
@@ -91,31 +85,28 @@ export default {
     },
     computed: {
         ...mapGetters("companies/companyControl", {
-            company: "controlledCompany",
+            storeData: "controlledCompany",
             hasCompany: "hasControlled"
         }),
-        hasUpdate() {
-            return Object.values(this.temp).reduce((has, val) => has || Boolean(val), false);
-        },
 
         //form props
         logo: {
-            get() { return this.temp.logo || this.company?.logo; },
+            get() { return this.temp.logo || this.storeData?.logo; },
             set(logo) {
                 if(logo[0]) this.setField("logo", logo[0]);
                 else this.clearField("logo");
             }
         },
         name: {
-            get() { return this.temp.name || this.company?.name; },
+            get() { return this.temp.name || this.storeData?.name; },
             set(name) { this.setField("name", name); }
         },
         priceReduction: {
-            get() { return this.temp.priceReduction || this.company?.priceReduction; },
+            get() { return this.temp.priceReduction || this.storeData?.priceReduction; },
             set(percent) { this.setField("priceReduction", percent); }
         },
         slug: {
-            get() { return this.temp.slug || this.company?.slug; },
+            get() { return this.temp.slug || this.storeData?.slug; },
             set(slug) { this.setField("slug", slug); }
         }
     },
@@ -124,33 +115,9 @@ export default {
             updateCompany: "updateCompany",
             removeCompany: "removeCompany"
         }),
-        setField(name, value) {
-            if(this.temp.hasOwnProperty(name)) {
-                if(value === this.company[name]) this.clearField(name);
-                else {
-                    this.temp[name] = value;
-                    this.formData.set(decamelize(name), value);
-                }
-            }
-        },
-        clearField(name, value = null) {
-            if(this.temp.hasOwnProperty(name)) {
-                this.temp[name] = value;
-                this.formData.delete(decamelize(name));
-            }
-        },
-        clearForm() {
-            this.temp = {
-                logo: null,
-                name: null,
-                priceReduction: null,
-                slug: null
-            };
-            this.formData = new FormData();
-        },
         update() {
             return new Promise((resolve, reject) => {
-                this.updateCompany({ id: this.company.id, data: this.formData })
+                this.updateCompany({ id: this.storeData.id, data: this.formData })
                     .then((company) => {
                         this.$notify({
                             title: `Company update`,
@@ -164,7 +131,7 @@ export default {
             });
         },
         remove() {
-            this.removeCompany(this.company.id)
+            this.removeCompany(this.storeData.id)
                 .then((company) => {
                     this.$notify({
                         title: "Company removed",
@@ -176,20 +143,8 @@ export default {
                 })
                 .catch((e) => this.$refs.updateForm.handleSubmitErrors(e));
         }
-    },
-    created() {
-        if(process.client) {
-            this.formData = new FormData();
-        }
     }
 };
 </script>
 
-<style lang="scss" scoped>
-    .control-company /deep/ .md-dialog-container {
-        padding: 20px;
-        padding-top: 0;
-        max-width: 500px;
-        width: 100%;
-    }
-</style>
+<style lang="scss" src="@mixins/ControlPopup/main.scss"></style>

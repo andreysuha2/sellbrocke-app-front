@@ -6,6 +6,7 @@
             :data-vv-name="formValidateName"
             v-bind="$attrs"
             :value="val"
+            :required="required"
             @md-change="change($event)"></md-file>
         <span
             v-if="subText"
