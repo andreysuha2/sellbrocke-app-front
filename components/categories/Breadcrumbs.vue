@@ -18,11 +18,6 @@ import { mapState } from "vuex";
 import NavigatorMixin from "@mixins/categories/Navigator";
 
 export default {
-    watch: {
-        breadcrumbs(old, n) {
-            dl.log(JSON.parse(JSON.stringify(old)), JSON.parse(JSON.stringify(n)));
-        }
-    },
     mixins: [ NavigatorMixin ],
     computed: {
         ...mapState("categories", [ "breadcrumbs" ]),

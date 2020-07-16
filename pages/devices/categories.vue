@@ -70,13 +70,14 @@ import { mapState, mapGetters } from "vuex";
 
 export default {
     mixins: [ NavigatorMixin ],
-    async fetch({ store, route }) {
+    async fetch({ store, route, redirect }) {
         try {
             const { category } = route.query;
             if(category) await store.dispatch("categories/loadCategory", { id: category, withDefects: true });
             else await store.dispatch("categories/loadRootCategories");
         } catch (e) {
             dl.error(e);
+            if(e.response && e.response.status === 404) redirect({ name: "devices-categories" });
         }
     },
     watchQuery: [ "category" ],

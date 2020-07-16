@@ -9,7 +9,8 @@ export default {
                     commit("setCategories", categories);
                     commit("setDefects", defects);
                     if(state.currentCategory) {
-                        commit("setCurrentCategory", { category: null, path: [] });
+                        commit("setCurrentCategory", null);
+                        commit("setBreadcrumbs", []);
                     }
                     resolve(categories);
                 }).catch((e) => reject(e));
@@ -21,7 +22,8 @@ export default {
                 .then((resp) => {
                     const { category, path, defects } = resp.data,
                         { children: categories } = category;
-                    commit("setCurrentCategory", { category, path });
+                    commit("setCurrentCategory", category);
+                    commit("setBreadcrumbs", path);
                     commit("setCategories", categories);
                     if(withDefects) commit("setDefects", defects);
                     resolve(category);
@@ -36,6 +38,17 @@ export default {
                 .then((resp) => {
                     const { category } = resp.data;
                     commit("addCategory", category);
+                    resolve(category);
+                }).catch((e) => reject(e));
+        });
+    },
+    updateCategory({ state, commit }, data) {
+        return new Promise((resolve, reject) => {
+            const { id } = state.currentCategory;
+            http.category.update(id, data)
+                .then((resp) => {
+                    const { category } = resp.data;
+                    commit("setCurrentCategory", category);
                     resolve(category);
                 }).catch((e) => reject(e));
         });

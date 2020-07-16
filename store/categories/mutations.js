@@ -7,9 +7,12 @@ export default {
     },
     addCategory(state, category) {
         state.categories.unshift(category);
+        if(state.currentCategory) state.currentCategory.descendantsCount++;
     },
-    setCurrentCategory(state, { category, path: breadcrumbs }) {
+    setCurrentCategory(state, category) {
         state.currentCategory = category;
+    },
+    setBreadcrumbs(state, breadcrumbs) {
         state.breadcrumbs = [ state.breadcrumbs[0], ...breadcrumbs ];
     }
 };
