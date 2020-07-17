@@ -150,15 +150,7 @@ export default {
                         });
                     }
                 })
-                .catch(e => {
-                    dl.error(e);
-                    // TODO make plugin to display server errors
-                    this.$notify({
-                        title: "Error",
-                        text: "Something was wrone",
-                        duration: 3000
-                    });
-                });
+                .catch(e => this.handleServerErrors(e, "Delete category error"));
         },
         clearDelete() {
             this.deleteData.showConfirm = false;

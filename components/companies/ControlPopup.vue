@@ -141,7 +141,7 @@ export default {
                     this.$emit("closePopup");
                     this.clearForm();
                 })
-                .catch((e) => this.$refs.updateForm.handleSubmitErrors(e));
+                .catch((e) => this.handleServerErrors(e, "Delete defect error"));
         }
     }
 };

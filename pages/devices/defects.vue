@@ -135,14 +135,7 @@ export default {
                         text: `Defect "${defect.name}" was deleted!`
                     });
                     this.redirectFromLastEmptyPage();
-                }).catch((e) => {
-                    dl.error(e);
-                    this.$notify({
-                        title: "Delete defect error",
-                        text: "Something went wrong!",
-                        type: "error"
-                    });
-                })
+                }).catch((e) => this.handleServerErrors(e, "Delete defect error"))
                 .finally(() => this.cancelDelete());
         },
         redirectFromLastEmptyPage() {
