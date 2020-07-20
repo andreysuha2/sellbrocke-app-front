@@ -23,6 +23,16 @@
                 display-error-name="device name"
                 placeholder="Device name"/>
             <app-input
+                v-model="basePrice"
+                required
+                type="number"
+                min="1"
+                step="0.01"
+                validate-name="base_price"
+                validate-rules="required|decimal:2|min:1"
+                display-error-name="base price"
+                placeholder="Device base price"/>
+            <app-input
                 v-model="slug"
                 required
                 validate-name="slug"
@@ -31,31 +41,31 @@
                 placeholder="Device slug"/>
             <app-select
                 required
-                v-model="relatedDefects"
+                v-model="company"
                 validate-name="company"
                 validate-rules="required"
                 placeholder="Device company"
                 display-error-name="company">
                 <md-option
-                    :key="defect.id"
-                    :value="defect.id"
-                    v-for="defect in defects">
-                    {{ defect.name }}
+                    :key="company.id"
+                    :value="company.id"
+                    v-for="company in companiesList">
+                    {{ company.name }}
                 </md-option>
             </app-select>
             <app-select
                 required
                 multiple
-                v-model="relatedDefects"
+                v-model="categories"
                 validate-name="categories"
                 validate-rules="required"
                 placeholder="Categories"
                 display-error-name="categories">
                 <md-option
-                    :key="defect.id"
-                    :value="defect.id"
-                    v-for="defect in defects">
-                    {{ defect.name }}
+                    :key="category.id"
+                    :value="category.id"
+                    v-for="category in categoriesList">
+                    {{ category.name }}
                 </md-option>
             </app-select>
             <app-textarea
@@ -89,20 +99,24 @@ export default {
                 name: null,
                 slug: null,
                 description: null,
-                defects: []
+                categories: [],
+                company: null,
+                basePrice: null
             }
         };
     },
     computed: {
-        ...mapState("categories", {
-            defects: "defectsList",
-            parentSlug(state) {
-                return state.currentCategory ? `${state.currentCategory.slug}/` : "";
-            }
+        ...mapState("devices", {
+            companiesList: "companies",
+            categoriesList: "categories"
         }),
-        relatedDefects: {
-            get() { return this.temp.defects; },
-            set(defects) { this.setField("defects", defects, true); }
+        categories: {
+            get() { return this.temp.categories; },
+            set(categories) { this.setField("categories", categories, true); }
+        },
+        basePrice: {
+            get() { return this.temp.basePrice; },
+            set(price) { this.setField("basePrice", price); }
         },
         thumbnail: {
             get() { return this.temp.thumbnail; },
@@ -111,13 +125,17 @@ export default {
                 else this.clearField(thumbnail);
             }
         },
+        company: {
+            get() { return this.temp.company; },
+            set(company) { this.setField("company", company); }
+        },
         name: {
             get() { return this.temp.name; },
             set(name) { this.setField("name", name); }
         },
         slug: {
-            get() { return this.temp.slug ? this.temp.slug.split("/").reverse()[0] : null; },
-            set(slug) { this.setField("slug", `${this.parentSlug}${slug}`); }
+            get() { return this.temp.slug; },
+            set(slug) { this.setField("slug", slug); }
         },
         description: {
             get() { return this.temp.description; },
@@ -125,19 +143,19 @@ export default {
         }
     },
     methods: {
-        ...mapActions("categories", { addCategory: "createCategory" }),
+        ...mapActions("devices", { addDevice: "createDevice" }),
         create() {
             return new Promise((resolve, reject) => {
-                this.addCategory(this.formData)
-                    .then((category) => {
+                this.addDevice(this.formData)
+                    .then((device) => {
                         this.$notify({
-                            title: `Category added`,
-                            text: `Category ${category.name} was created`,
+                            title: `Device added`,
+                            text: `Device ${device.name} was created`,
                             duration: 3000
                         });
                         this.$emit("closePopup");
                         this.clearForm();
-                        resolve(category);
+                        resolve(device);
                     }).catch((e) => reject(e));
             });
         }
