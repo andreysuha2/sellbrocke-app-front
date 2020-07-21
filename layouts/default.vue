@@ -56,6 +56,7 @@ export default {
         padding: 20px;
         overflow-y: scroll;
         flex: 1 0 auto;
+        max-height: calc(100vh - 140px);
     }
 
     &--footer {

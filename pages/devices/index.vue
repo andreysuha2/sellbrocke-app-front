@@ -75,11 +75,19 @@
                     </md-table-cell>
                 </md-table-row>
             </md-table>
+            <div class="devices-pagination">
+                <app-pagination/>
+            </div>
         </template>
         <create-device
             v-if="canCreate"
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
+        <md-dialog-alert
+            v-else
+            :md-active.sync="showCreatePopup"
+            md-title="Prevent create device!"
+            :md-content="emptyDescription" />
         <update-device
             v-if="hasCurrentDevice && hasDevices"
             @closePopup="closeDevice"
@@ -91,10 +99,6 @@
             @md-cancel="cancelDelete"
             @md-confirm="confirmDelete"
             md-title="Delete device"/>
-        <md-dialog-alert
-            :md-active.sync="showCreatePopup"
-            md-title="Prevent create device!"
-            :md-content="emptyDescription" />
     </app-page>
 </template>
 

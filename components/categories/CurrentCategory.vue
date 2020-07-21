@@ -18,9 +18,11 @@
                         <div class="category-data--head"><span>Slug</span></div>
                         <div class="category-data--item"><span>{{ category.slug }}</span></div>
                     </div>
-                    <div class="category-data--row">
+                    <div class="category-data--row flex-col">
                         <div class="category-data--head"><span>Description</span></div>
-                        <div class="category-data--item"><p>{{ category.description }}</p></div>
+                        <div class="category-data--item">
+                            <p class="category-data--description">{{ category.description }}</p>
+                        </div>
                     </div>
                 </div>
                 <div class="category-data--column">
@@ -97,6 +99,10 @@ export default {
         &:not(:last-child) {
             margin-bottom: 10px;
         }
+    }
+
+    &--description {
+        max-width: 400px;
     }
 
     &--column:not(:last-child) {
