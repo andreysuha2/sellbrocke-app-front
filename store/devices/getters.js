@@ -7,5 +7,8 @@ export default {
     },
     canCreate(state, getters) {
         return Boolean(getters.hasCategories && getters.hasCompanies);
+    },
+    hasDevices(state) {
+        return state.devices ? Boolean(state.devices.length) : false;
     }
 };
