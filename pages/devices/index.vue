@@ -63,12 +63,12 @@
                     </md-table-cell>
                     <md-table-cell>
                         <md-button
-                            @click="openUpdatePopup(device.id)"
+                            @click="selectDevice(device.id)"
                             class="devices-list--control md-icon-button md-raised">
                             <md-icon>edit</md-icon>
                         </md-button>
                         <md-button
-                            @click="removeConfimation(defect)"
+                            @click="removeConfirmation(device)"
                             class="devices-list--control md-icon-button md-raised">
                             <md-icon>delete</md-icon>
                         </md-button>
@@ -81,9 +81,16 @@
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
         <update-device
-            v-if="hasCurrentDevice"
-            @closePopup="closeUpdatePopup"
-            :show-popup="showUpdatePopup"/>
+            v-if="hasCurrentDevice && hasDevices"
+            @closePopup="closeDevice"
+            :show-popup="hasCurrentDevice"/>
+        <md-dialog-confirm
+            v-if="hasDevices"
+            :md-active.sync="showDeleteConfirmation"
+            :md-content='`Do you whant delete device "${deletedDeviceData.name}"?`'
+            @md-cancel="cancelDelete"
+            @md-confirm="confirmDelete"
+            md-title="Delete device"/>
         <md-dialog-alert
             :md-active.sync="showCreatePopup"
             md-title="Prevent create device!"
@@ -94,7 +101,7 @@
 <script>
 import CreationPopup from "@components/devices/CreationPopup";
 import UpdatePopup from "@components/devices/UpdatePopup";
-import { mapGetters, mapState, mapMutations } from "vuex";
+import { mapGetters, mapState, mapMutations, mapActions } from "vuex";
 
 export default {
     async fetch({ store }) {
@@ -111,7 +118,11 @@ export default {
     data() {
         return {
             showCreatePopup: false,
-            showUpdatePopup: false
+            showDeleteConfirmation: false,
+            deletedDeviceData: {
+                id: null,
+                name: null
+            }
         };
     },
     computed: {
@@ -126,17 +137,30 @@ export default {
         }
     },
     methods: {
+        ...mapActions("devices", { deleteDevice: "removeDevice" }),
         ...mapMutations("devices/currentDevice", {
             selectDevice: "setDevice",
             closeDevice: "cancelDevice"
         }),
-        openUpdatePopup(deviceId) {
-            this.selectDevice(deviceId);
-            this.showUpdatePopup = true;
+        removeConfirmation({ id, name }) {
+            this.deletedDeviceData.id = id;
+            this.deletedDeviceData.name = name;
+            this.showDeleteConfirmation = true;
         },
-        closeUpdatePopup() {
-            this.showUpdatePopup = false;
-            this.closeDevice();
+        cancelDelete() {
+            this.showDeleteConfirmation = false;
+            this.deletedDeviceData.id = null;
+            this.deletedDeviceData.name = null;
+        },
+        confirmDelete() {
+            this.deleteDevice(this.deletedDeviceData.id)
+                .then((device) => {
+                    this.$notify({
+                        title: "Device deleted",
+                        text: `Device "${device.name}" was deleted!`
+                    });
+                }).catch((e) => this.handleServerErrors(e, "Delete device error"))
+                .finally(() => this.cancelDelete());
         }
     }
 };

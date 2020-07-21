@@ -37,7 +37,7 @@
                             <md-icon>edit</md-icon>
                         </md-button>
                         <md-button
-                            @click="removeConfimation(defect)"
+                            @click="removeConfirmation(defect)"
                             class="defects-list--control md-icon-button md-raised">
                             <md-icon>delete</md-icon>
                         </md-button>
@@ -117,7 +117,7 @@ export default {
             openUpdatePopup: "setDefect",
             closeUpdatePopup: "cancelDefect"
         }),
-        removeConfimation({ id, name }) {
+        removeConfirmation({ id, name }) {
             this.deletedDefectData.id = id;
             this.deletedDefectData.name = name;
             this.showDeleteConfirmation = true;

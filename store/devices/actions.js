@@ -34,5 +34,15 @@ export default {
                     resolve(device);
                 }).catch((e) => reject(e));
         });
+    },
+    removeDevice({ commit }, id) {
+        return new Promise((resolve, reject) => {
+            http.device.delete(id)
+                .then((resp) => {
+                    const { device } = resp.data;
+                    commit("deleteDevice", device.id);
+                    resolve(device);
+                }).catch((e) => reject(e));
+        });
     }
 };
