@@ -48,3 +48,27 @@ export function arrayChunk(arr, size) {
     for(let i = 0; i < arr.length; i += size) temp.push(arr.slice(i, i + size));
     return temp;
 }
+
+/**
+ *  @desc резолвит добавление/удаление item из multi select используется при обновлени уже извесного списка
+ *  @param {array} newItems - изменненный список [id]
+ *  @param {array} existingItems - актуальный список [id]
+ *  @returns {Object} diff - Объект с результатом
+ *  @returns {array|null} diff.attached - массив добавленых или null если ничего не добавлено
+ *  @returns {array|null} diff.detached - массив удаленных или null если ничего не удалено
+ */
+export function listDiff(newItems, existingItems) {
+    // функция ищущая остутсвующие елементы из acc в checkIn
+    const resolver = (acc, checkIn) => acc.reduce((list, item) => {
+            if(!checkIn.includes(item)) list.push(item);
+            return list;
+        }, []),
+        // находим елементы присутвующие в newItems и отсутсвующие в existingItems получаем добавленые
+        attached = resolver(newItems, existingItems),
+        // находим елементы присутвующие в existingItems и отсутствующие в newItems получаем удаленные
+        detached = resolver(existingItems, newItems);
+    return {
+        attached: attached.length ? attached : null,
+        detached: detached.length ? detached : null
+    };
+}

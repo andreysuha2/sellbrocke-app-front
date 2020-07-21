@@ -13,5 +13,9 @@ export default {
     },
     addDevice(state, device) {
         state.devices.unshift(device);
+    },
+    updateDevice(state, deviceData) {
+        const deviceIndex = state.devices.findIndex((device) => device.id === deviceData.id);
+        if(deviceIndex !== -1) state.devices.splice(deviceIndex, 1, deviceData);
     }
 };

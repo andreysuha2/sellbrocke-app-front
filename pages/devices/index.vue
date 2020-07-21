@@ -43,27 +43,33 @@
                         </nuxt-link>
                     </md-table-cell>
                     <md-table-cell>
-                        <nuxt-link
-                            class="device-list--category"
-                            v-for="category in device.categories"
-                            :key="category.id"
-                            :to="{ name: 'devices-categories', query: { category: category.id } }"
-                        >
-                            {{ category.name }}
-                        </nuxt-link>
+                        <div class="flex">
+                            <div
+                                v-for="category in device.categories"
+                                :key="category.id"
+                                class="devices-list--category">
+                                <nuxt-link
+                                    :to="{ name: 'devices-categories', query: { category: category.id } }"
+                                >
+                                    {{ category.name }}
+                                </nuxt-link>
+                            </div>
+                        </div>
                     </md-table-cell>
                     <md-table-cell>{{ device.slug }}</md-table-cell>
-                    <md-table-cell>{{ device.prices.base }}</md-table-cell>
-                    <md-table-cell>{{ device.prices.discounted }}</md-table-cell>
+                    <md-table-cell>{{ device.prices.base }}$</md-table-cell>
+                    <md-table-cell>
+                        {{ device.prices.discounted }}$ ({{ device.company.priceReduction }}%)
+                    </md-table-cell>
                     <md-table-cell>
                         <md-button
-                            @click="openUpdatePopup(defect.id)"
-                            class="defects-list--control md-icon-button md-raised">
+                            @click="openUpdatePopup(device.id)"
+                            class="devices-list--control md-icon-button md-raised">
                             <md-icon>edit</md-icon>
                         </md-button>
                         <md-button
                             @click="removeConfimation(defect)"
-                            class="defects-list--control md-icon-button md-raised">
+                            class="devices-list--control md-icon-button md-raised">
                             <md-icon>delete</md-icon>
                         </md-button>
                     </md-table-cell>
@@ -74,8 +80,11 @@
             v-if="canCreate"
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
+        <update-device
+            v-if="hasCurrentDevice"
+            @closePopup="closeUpdatePopup"
+            :show-popup="showUpdatePopup"/>
         <md-dialog-alert
-            v-else
             :md-active.sync="showCreatePopup"
             md-title="Prevent create device!"
             :md-content="emptyDescription" />
@@ -84,7 +93,8 @@
 
 <script>
 import CreationPopup from "@components/devices/CreationPopup";
-import { mapGetters, mapState } from "vuex";
+import UpdatePopup from "@components/devices/UpdatePopup";
+import { mapGetters, mapState, mapMutations } from "vuex";
 
 export default {
     async fetch({ store }) {
@@ -94,9 +104,15 @@ export default {
             dl.error(e.response);
         }
     },
-    components: { "create-device": CreationPopup },
+    components: {
+        "create-device": CreationPopup,
+        "update-device": UpdatePopup
+    },
     data() {
-        return { showCreatePopup: false };
+        return {
+            showCreatePopup: false,
+            showUpdatePopup: false
+        };
     },
     computed: {
         ...mapState("devices", { devices: "devices" }),
@@ -104,8 +120,23 @@ export default {
             canCreate: "canCreate",
             hasDevices: "hasDevices"
         }),
+        ...mapGetters("devices/currentDevice", { hasCurrentDevice: "hasCurrentDevice" }),
         emptyDescription() {
             return this.canCreate ? "Create device to start you business" : "You must created categories and companies before create devices";
+        }
+    },
+    methods: {
+        ...mapMutations("devices/currentDevice", {
+            selectDevice: "setDevice",
+            closeDevice: "cancelDevice"
+        }),
+        openUpdatePopup(deviceId) {
+            this.selectDevice(deviceId);
+            this.showUpdatePopup = true;
+        },
+        closeUpdatePopup() {
+            this.showUpdatePopup = false;
+            this.closeDevice();
         }
     }
 };
@@ -123,6 +154,10 @@ export default {
         &:after {
             content: ',';
         }
+    }
+
+    &--control:not(:last-child) {
+        margin-right: 10px;
     }
 }
 

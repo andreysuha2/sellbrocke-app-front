@@ -1,16 +1,14 @@
 <template>
     <md-dialog
         class="control-popup"
-        @md-closed="clearForm"
-        @md-clicked-outside="$emit('closePopup')"
+        @md-clicked-outside="closePopup"
         :md-active="showPopup">
-        <md-dialog-title>Create device</md-dialog-title>
+        <md-dialog-title>Update device "{{ deviceName }}"</md-dialog-title>
         <app-form
-            :on-submit="create"
-            form-name="create-device">
+            :on-submit="update"
+            form-name="update-device">
             <app-file
                 v-model="thumbnail"
-                required
                 accept="image/*"
                 validate-name="thumbnail"
                 display-error-name="device thumbnail"
@@ -77,7 +75,7 @@
             <div class="flex justify-between">
                 <md-button
                     type="submit"
-                    class="md-primary md-raised">Create</md-button>
+                    class="md-primary md-raised">Update</md-button>
                 <md-button
                     @click="$emit('closePopup')"
                     class="md-accent md-raised">Cancel</md-button>
@@ -87,7 +85,8 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { listDiff } from "@helpers/functions";
 import popupMixin from "@mixins/ControlPopup";
 
 export default {
@@ -97,60 +96,79 @@ export default {
             tempDefault: {
                 thumbnail: null,
                 name: null,
+                basePrice: null,
                 slug: null,
-                description: null,
-                categories: [],
                 company: null,
-                basePrice: null
+                categories: [],
+                attachCategories: [],
+                detachCategories: [],
+                description: null
             }
         };
     },
     computed: {
+        ...mapGetters("devices/currentDevice", { storeData: "device" }),
+        ...mapState("devices/currentDevice", { id: "deviceId" }),
         ...mapState("devices", {
-            companiesList: "companies",
-            categoriesList: "categories"
+            categoriesList: "categories",
+            companiesList: "companies"
         }),
-        categories: {
-            get() { return this.temp.categories; },
-            set(categories) { this.setField("categories", categories, true); }
-        },
-        basePrice: {
-            get() { return this.temp.basePrice; },
-            set(price) { this.setField("basePrice", price); }
-        },
+        deviceName() { return this.storeData ? this.storeData.name : null; },
+        updateData() { return { id: this.id, data: this.formData }; },
+        existingCategories() { return this.storeData.categories.map((category) => category.id); },
+        // form props
         thumbnail: {
-            get() { return this.temp.thumbnail; },
+            get() { return this.temp.thumbnail || this.storeData.thumbnail; },
             set(thumbnail) {
                 if(thumbnail[0]) this.setField("thumbnail", thumbnail[0]);
                 else this.clearField(thumbnail);
             }
         },
-        company: {
-            get() { return this.temp.company; },
-            set(company) { this.setField("company", company); }
-        },
         name: {
-            get() { return this.temp.name; },
+            get() { return this.temp.name || this.storeData.name; },
             set(name) { this.setField("name", name); }
         },
+        basePrice: {
+            get() { return this.temp.basePrice || this.storeData.prices.base; },
+            set(price) { this.setField("basePrice", price); }
+        },
         slug: {
-            get() { return this.temp.slug; },
+            get() { return this.temp.slug || this.storeData.slug; },
             set(slug) { this.setField("slug", slug); }
         },
+        company: {
+            get() { return this.temp.company || this.storeData.company.id; },
+            set(companyId) { this.setField("company", companyId); }
+        },
+        categories: {
+            get() { return this.temp.category || this.storeData.categories.map((category) => category.id); },
+            set(categories) {
+                this.temp.categories = categories;
+                const { attached, detached } = listDiff(categories, this.existingCategories);
+                if(attached) this.setField("attachCategories", attached, true);
+                else this.clearField("attachCategories");
+                if(detached) this.setField("detachCategories", detached, true);
+                else this.clearField("detachCategories");
+            }
+        },
         description: {
-            get() { return this.temp.description; },
+            get() { return this.temp.description !== null ? this.temp.description : this.storeData.description; },
             set(desc) { this.setField("description", desc); }
         }
     },
     methods: {
-        ...mapActions("devices", { addDevice: "createDevice" }),
-        create() {
+        ...mapActions("devices", { updateDevice: "updateDevice" }),
+        closePopup() {
+            this.$emit("closePopup");
+            this.clearForm();
+        },
+        update() {
             return new Promise((resolve, reject) => {
-                this.addDevice(this.formData)
+                this.updateDevice(this.updateData)
                     .then((device) => {
                         this.$notify({
-                            title: `Device added`,
-                            text: `Device ${device.name} was created`,
+                            title: `Device updated`,
+                            text: `Device ${device.name} was updated`,
                             duration: 3000
                         });
                         this.$emit("closePopup");

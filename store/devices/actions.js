@@ -24,5 +24,15 @@ export default {
                     resolve(device);
                 }).catch((e) => reject(e));
         });
+    },
+    updateDevice({ commit }, { id, data }) {
+        return new Promise((resolve, reject) => {
+            http.device.update(id, data)
+                .then((resp) => {
+                    const { device } = resp.data;
+                    commit("updateDevice", device);
+                    resolve(device);
+                }).catch((e) => reject(e));
+        });
     }
 };
