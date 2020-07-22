@@ -32,7 +32,7 @@
                     </div>
                     <div class="category-data--row">
                         <div class="category-data--head"><span>Devices count</span></div>
-                        <div class="category-data--item"><span>{{ devicesCount }}</span></div>
+                        <div class="category-data--item"><span>{{ category.devicesCount }}</span></div>
                     </div>
                     <div class="category-data--row">
                         <div class="category-data--head"><span>Children count</span></div>
@@ -61,7 +61,6 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import { randomNumber } from "@helpers/generators";
 import UpdateCategory from "@components/categories/UpdatePopup";
 
 export default {
@@ -74,9 +73,6 @@ export default {
         ...mapGetters("categories", { childrenCount: "categoriesCount" }),
         defects() {
             return this.category.defects.map((defect) => defect.name).join(', ');
-        },
-        devicesCount() {
-            return randomNumber(0, 10000);
         }
     }
 };

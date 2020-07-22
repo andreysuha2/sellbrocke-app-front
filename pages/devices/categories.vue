@@ -68,7 +68,7 @@
             :show-popup="showCreatePopup"/>
         <md-dialog-alert
             :md-active.sync="deleteData.showAlert"
-            md-content="You cant remove category with child categories and attached devices!"/>
+            md-content="You cant remove category with child categories and/or attached devices!"/>
         <md-dialog-confirm
             :md-active.sync="deleteData.showConfirm"
             md-title='Remove category'
@@ -134,8 +134,7 @@ export default {
             if(this.category && this.category.id === id) category = this.category;
             else category = this.categories.find((category) => category.id === id);
             if(category) {
-                // TODO: check related devices
-                if(category.descendantsCount) this.deleteData.showAlert = true;
+                if(category.descendantsCount || category.devicesCount) this.deleteData.showAlert = true;
                 else {
                     this.deleteData.id = category.id;
                     this.deleteData.name = category.name;
