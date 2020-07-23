@@ -43,7 +43,7 @@
                         </nuxt-link>
                     </md-table-cell>
                     <md-table-cell>
-                        <div class="flex flex-wrap">
+                        <div class="flex flex-wrap devices-list--categories">
                             <div
                                 v-for="category in device.categories"
                                 :key="category.id"
@@ -183,6 +183,10 @@ export default {
 .devices-list {
     &--id {
         width: 100px;
+    }
+
+    &--categories {
+        max-width: 420px;
     }
 
     &--category:not(:last-child) {
