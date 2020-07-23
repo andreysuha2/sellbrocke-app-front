@@ -49,9 +49,6 @@ export default {
             this.redirectFromLastEmptyPage();
         }
     },
-    beforeCreate() {
-        dl.log("test");
-    },
     created() {
         this.pagePaginationId = this.currentPaginationId;
     },

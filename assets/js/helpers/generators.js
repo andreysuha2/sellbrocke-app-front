@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-let keyGenIncrement = 0;
+let keysGen = { key: 0 };
 
 export function randomStr(str = "", len = 8) {
     let isNum = Math.random() < 0.5,
@@ -10,9 +10,11 @@ export function randomStr(str = "", len = 8) {
 }
 
 export function genKey(str = "key", len = 8) {
-    keyGenIncrement++;
+    if(!keysGen.hasOwnProperty(str)) keysGen[str] = 0;
+    keysGen[str]++;
+    const increment = keysGen[str];
     let randStr = randomStr("", len);
-    return `${str}-${keyGenIncrement}-${new Date().getTime() + keyGenIncrement}-${randStr}`;
+    return `${str.toUpperCase()}-${increment}-${new Date().getTime() + increment}-${randStr.toUpperCase()}`;
 }
 
 export function genUid() {

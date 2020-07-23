@@ -5,8 +5,9 @@ class ProductsGridsHTTP extends Http {
         super({ slug: "products-grids" });
     }
 
-    getProductsGrids() {
-        return this.query.get();
+    getProductsGrids(page = null) {
+        const params = page ? { page } : {};
+        return this.query.get("", { params });
     }
 
     get productGrid() {
@@ -17,7 +18,7 @@ class ProductsGridsHTTP extends Http {
                 data.set("_method", "PUT");
                 return query.post(`${id}`, data);
             },
-            delete: (id) => query.delete(id)
+            delete: (id, params = {}) => query.delete(id, { params })
         }));
     }
 }

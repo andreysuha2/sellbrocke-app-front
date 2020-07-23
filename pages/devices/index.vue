@@ -116,11 +116,10 @@ export default {
     mixins: [ paginationMixin ],
     async fetch({ store, route, redirect }) {
         try {
-            dl.log("fetch devices");
             const { page } = route.query;
             await store.dispatch("devices/loadDevices", page);
             const { currentPage, lastPage } = store.state.app.pagePagination.pagination;
-            if(currentPage > lastPage) redirect({ name: 'devices-defects' });
+            if(currentPage > lastPage) redirect({ name: 'devices' });
         } catch (e) {
             dl.error(e.response);
         }
