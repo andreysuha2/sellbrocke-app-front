@@ -94,6 +94,7 @@ export default {
                             duration: 3000
                         });
                         this.$emit("closePopup");
+                        this.$emit("updateDefect", defect);
                         this.clearForm();
                         resolve(defect);
                     }).catch((e) => reject(e));

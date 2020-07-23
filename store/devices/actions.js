@@ -9,39 +9,38 @@ export default {
                         { data: devices, meta } = resp.data.devices;
                     commit("setCategories", categories);
                     commit("setCompanies", companies);
-                    commit("setDevices", devices);
-                    commit("setMeta", meta);
+                    commit("app/pagePagination/setItems", devices, { root: true });
+                    commit("app/pagePagination/setPagination", meta, { root: true });
                     resolve(devices);
                 }).catch((e) => reject(e));
         });
     },
-    createDevice({ commit }, data) {
+    createDevice({ rootState, dispatch }, data) {
         return new Promise((resolve, reject) => {
+            const { currentPage } = rootState.app.pagePagination.pagination;
             http.device.create(data)
                 .then((resp) => {
                     const { device } = resp.data;
-                    commit("addDevice", device);
+                    if(currentPage !== 1) dispatch("loadDevices", currentPage);
                     resolve(device);
                 }).catch((e) => reject(e));
         });
     },
-    updateDevice({ commit }, { id, data }) {
+    updateDevice({}, { id, data }) {
         return new Promise((resolve, reject) => {
             http.device.update(id, data)
                 .then((resp) => {
                     const { device } = resp.data;
-                    commit("updateDevice", device);
                     resolve(device);
                 }).catch((e) => reject(e));
         });
     },
-    removeDevice({ commit }, id) {
+    removeDevice({ getters }, id) {
         return new Promise((resolve, reject) => {
-            http.device.delete(id)
+            http.device.delete(id, { lastDeviceId: getters.lastDeviceId })
                 .then((resp) => {
-                    const { device } = resp.data;
-                    commit("deleteDevice", device.id);
-                    resolve(device);
+                    const { data } = resp;
+                    resolve(data);
                 }).catch((e) => reject(e));
         });
     }

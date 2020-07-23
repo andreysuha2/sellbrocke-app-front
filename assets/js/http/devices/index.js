@@ -19,7 +19,7 @@ class DevicesHTTP extends Http {
                 data.set("_method", "PUT");
                 return query.post(`${id}`, data);
             },
-            delete: (id) => query.delete(`${id}`)
+            delete: (id, params) => query.delete(`${id}`, { params })
         }));
     }
 }

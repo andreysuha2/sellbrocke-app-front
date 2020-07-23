@@ -1,5 +1,5 @@
 <template>
-    <app-page title="Devices">
+    <app-page v-if="isCurrentPaginateItems" title="Devices">
         <template #header>
             <md-button
                 @click="showCreatePopup = true"
@@ -43,7 +43,7 @@
                         </nuxt-link>
                     </md-table-cell>
                     <md-table-cell>
-                        <div class="flex">
+                        <div class="flex flex-wrap">
                             <div
                                 v-for="category in device.categories"
                                 :key="category.id"
@@ -75,12 +75,15 @@
                     </md-table-cell>
                 </md-table-row>
             </md-table>
-            <div class="devices-pagination">
-                <app-pagination/>
+            <div class="devices-pagination flex justify-between items-center">
+                <app-pagination v-if="hasPages"/>
+                <div></div>
+                <span>total devices: {{ totalItems }}</span>
             </div>
         </template>
         <create-device
             v-if="canCreate"
+            @addDevice="addPaginateItem($event)"
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
         <md-dialog-alert
@@ -90,6 +93,7 @@
             :md-content="emptyDescription" />
         <update-device
             v-if="hasCurrentDevice && hasDevices"
+            @updateDevice="updatePaginateItem($event)"
             @closePopup="closeDevice"
             :show-popup="hasCurrentDevice"/>
         <md-dialog-confirm
@@ -105,12 +109,18 @@
 <script>
 import CreationPopup from "@components/devices/CreationPopup";
 import UpdatePopup from "@components/devices/UpdatePopup";
-import { mapGetters, mapState, mapMutations, mapActions } from "vuex";
+import { mapGetters, mapState, mapMutations } from "vuex";
+import paginationMixin from "@mixins/pages/pagination";
 
 export default {
-    async fetch({ store }) {
+    mixins: [ paginationMixin ],
+    async fetch({ store, route, redirect }) {
         try {
-            await store.dispatch("devices/loadDevices");
+            dl.log("fetch devices");
+            const { page } = route.query;
+            await store.dispatch("devices/loadDevices", page);
+            const { currentPage, lastPage } = store.state.app.pagePagination.pagination;
+            if(currentPage > lastPage) redirect({ name: 'devices-defects' });
         } catch (e) {
             dl.error(e.response);
         }
@@ -130,7 +140,7 @@ export default {
         };
     },
     computed: {
-        ...mapState("devices", { devices: "devices" }),
+        ...mapState("app/pagePagination", { devices: "items" }),
         ...mapGetters("devices", {
             canCreate: "canCreate",
             hasDevices: "hasDevices"
@@ -141,7 +151,6 @@ export default {
         }
     },
     methods: {
-        ...mapActions("devices", { deleteDevice: "removeDevice" }),
         ...mapMutations("devices/currentDevice", {
             selectDevice: "setDevice",
             closeDevice: "cancelDevice"
@@ -158,11 +167,12 @@ export default {
         },
         confirmDelete() {
             this.deleteDevice(this.deletedDeviceData.id)
-                .then((device) => {
+                .then(({ device, nextDevice }) => {
                     this.$notify({
                         title: "Device deleted",
                         text: `Device "${device.name}" was deleted!`
                     });
+                    this.removePaginateItem(device.id, nextDevice);
                 }).catch((e) => this.handleServerErrors(e, "Delete device error"))
                 .finally(() => this.cancelDelete());
         }
@@ -195,5 +205,9 @@ export default {
         height: 50px;
         margin-right: 10px;
     }
+}
+
+.devices-pagination {
+    margin-top: 30px;
 }
 </style>

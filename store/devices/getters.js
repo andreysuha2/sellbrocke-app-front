@@ -8,7 +8,16 @@ export default {
     canCreate(state, getters) {
         return Boolean(getters.hasCategories && getters.hasCompanies);
     },
-    hasDevices(state) {
-        return state.devices ? Boolean(state.devices.length) : false;
+    hasDevices(state, getters, rootState) {
+        const { items: devices } = rootState.app.pagePagination;
+        return devices ? Boolean(devices.length) : false;
+    },
+    lastDeviceId(state, getters, rootState) {
+        const { items: devices } = rootState.app.pagePagination;
+        if(devices) {
+            const lastDevice = devices[devices.length - 1];
+            return lastDevice ? lastDevice.id : null;
+        }
+        return null;
     }
 };

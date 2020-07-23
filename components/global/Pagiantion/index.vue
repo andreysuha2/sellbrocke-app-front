@@ -31,17 +31,10 @@
 
 <script>
 import { genKey } from "@helpers/generators";
+import { mapState } from "vuex";
 
 export default {
     props: {
-        currentPage: {
-            type: Number,
-            default: 1
-        },
-        totalPages: {
-            type: Number,
-            default: 1
-        },
         maxDisplayed: {
             type: Number,
             default: 10
@@ -64,6 +57,10 @@ export default {
         }
     },
     computed: {
+        ...mapState("app/pagePagination", {
+            totalPages: (state) => state.pagination?.lastPage,
+            currentPage: (state) => state.pagination?.currentPage
+        }),
         displayArrow() {
             return {
                 prev: this.alwaysArrows || !this.isFirstPage,

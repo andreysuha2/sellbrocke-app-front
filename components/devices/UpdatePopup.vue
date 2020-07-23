@@ -172,6 +172,7 @@ export default {
                             duration: 3000
                         });
                         this.$emit("closePopup");
+                        this.$emit("updateDevice", device);
                         this.clearForm();
                         resolve(device);
                     }).catch((e) => reject(e));

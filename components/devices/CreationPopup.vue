@@ -154,6 +154,7 @@ export default {
                             duration: 3000
                         });
                         this.$emit("closePopup");
+                        this.$emit("addDevice", device);
                         this.clearForm();
                         resolve(device);
                     }).catch((e) => reject(e));
