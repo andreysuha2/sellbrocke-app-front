@@ -23,5 +23,14 @@ export default {
                     resolve(productGrid);
                 }).catch((e) => reject(e));
         });
+    },
+    updateProductGrid({}, { id, data }) {
+        return new Promise((resolve, reject) => {
+            http.productGrid.update(id, data)
+                .then((resp) => {
+                    const { productGrid } = resp.data;
+                    resolve(productGrid);
+                }).catch((e) => reject(e));
+        });
     }
 };

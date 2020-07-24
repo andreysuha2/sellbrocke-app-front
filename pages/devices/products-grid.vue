@@ -56,8 +56,12 @@
                 <span>total products grids: {{ totalItems }}</span>
             </div>
         </template>
+        <update-product-grid
+            @closePopup="clearProductGrid"
+            @updateProductGrid="updatePaginateItem($event)"
+            :show-popup="showUpdatePopup"/>
         <create-product-grid
-            @addProductGrid="addNextPaginateItem($event)"
+            @addProductGrid="addPaginateItem($event)"
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
     </app-page>
@@ -66,11 +70,15 @@
 <script>
 import paginationMixin from "@mixins/pages/pagination";
 import CreationPopup from "@components/productsGrids/CreationPopup";
-import { mapGetters, mapState } from "vuex";
+import UpdatePopup from "@components/productsGrids/UpdatePopup";
+import { mapGetters, mapState, mapMutations } from "vuex";
 
 export default {
     mixins: [ paginationMixin ],
-    components: { "create-product-grid": CreationPopup },
+    components: {
+        "create-product-grid": CreationPopup,
+        "update-product-grid": UpdatePopup
+    },
     async fetch({ store, route, redirect }) {
         try {
             const { page } = route.query;
@@ -86,7 +94,14 @@ export default {
     },
     computed: {
         ...mapState("app/pagePagination", { productsGrids: "items" }),
-        ...mapGetters("productsGrids", [ "hasProductsGrids" ])
+        ...mapGetters("productsGrids", [ "hasProductsGrids" ]),
+        ...mapGetters("productsGrids/currentProductGrid", { showUpdatePopup: "hasSelectedProductGrid" })
+    },
+    methods: {
+        ...mapMutations("productsGrids/currentProductGrid", {
+            selectProductGrid: "enableProductGrid",
+            clearProductGrid: "disableProductGrid"
+        })
     }
 };
 </script>

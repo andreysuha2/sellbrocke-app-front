@@ -23,7 +23,6 @@ export default {
     },
     setPagination(state, pagination) {
         if(!state.id || pagination.path !== state.pagination.path) {
-            dl.log("change id");
             state.id = genKey("APP_PAGINATION");
         }
         state.pagination = camelizeObject(pagination);
