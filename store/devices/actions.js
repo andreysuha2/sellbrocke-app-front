@@ -5,10 +5,11 @@ export default {
         return new Promise((resolve, reject) => {
             http.getDevices(page)
                 .then((resp) => {
-                    const { companies, categories } = resp.data,
+                    const { companies, categories, productsGrids } = resp.data,
                         { data: devices, meta } = resp.data.devices;
                     commit("setCategories", categories);
                     commit("setCompanies", companies);
+                    commit("setProductsGrids", productsGrids);
                     commit("app/pagePagination/setItems", devices, { root: true });
                     commit("app/pagePagination/setPagination", meta, { root: true });
                     resolve(devices);

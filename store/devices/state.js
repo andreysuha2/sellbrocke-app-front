@@ -1,4 +1,5 @@
 export default () => ({
     categories: null,
-    companies: null
+    companies: null,
+    productsGrids: null
 });

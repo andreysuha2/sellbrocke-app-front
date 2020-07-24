@@ -109,7 +109,7 @@
 <script>
 import CreationPopup from "@components/devices/CreationPopup";
 import UpdatePopup from "@components/devices/UpdatePopup";
-import { mapGetters, mapState, mapMutations } from "vuex";
+import { mapGetters, mapState, mapMutations, mapActions } from "vuex";
 import paginationMixin from "@mixins/pages/pagination";
 
 export default {
@@ -154,6 +154,7 @@ export default {
             selectDevice: "setDevice",
             closeDevice: "cancelDevice"
         }),
+        ...mapActions("devices", { deleteDevice: "removeDevice" }),
         removeConfirmation({ id, name }) {
             this.deletedDeviceData.id = id;
             this.deletedDeviceData.name = name;

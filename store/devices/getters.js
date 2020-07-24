@@ -19,5 +19,11 @@ export default {
             return lastDevice ? lastDevice.id : null;
         }
         return null;
+    },
+    productsGridsCarriers(state) {
+        return state.productsGrids ? state.productsGrids.filter((productGrid) => productGrid.type === "carrier") : null;
+    },
+    productsGridsSizes(state) {
+        return state.productsGrids ? state.productsGrids.filter((productGrid) => productGrid.type === "size") : null;
     }
 };
