@@ -43,7 +43,7 @@
                         </nuxt-link>
                     </md-table-cell>
                     <md-table-cell>
-                        <div class="flex flex-wrap">
+                        <div class="flex flex-wrap devices-list--categories">
                             <div
                                 v-for="category in device.categories"
                                 :key="category.id"
@@ -116,11 +116,10 @@ export default {
     mixins: [ paginationMixin ],
     async fetch({ store, route, redirect }) {
         try {
-            dl.log("fetch devices");
             const { page } = route.query;
             await store.dispatch("devices/loadDevices", page);
             const { currentPage, lastPage } = store.state.app.pagePagination.pagination;
-            if(currentPage > lastPage) redirect({ name: 'devices-defects' });
+            if(currentPage > lastPage) redirect({ name: 'devices' });
         } catch (e) {
             dl.error(e.response);
         }
@@ -184,6 +183,10 @@ export default {
 .devices-list {
     &--id {
         width: 100px;
+    }
+
+    &--categories {
+        max-width: 420px;
     }
 
     &--category:not(:last-child) {

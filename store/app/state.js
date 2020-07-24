@@ -40,6 +40,11 @@ export default () => ({
                 },
                 {
                     key: genKey("MENU_SUB_ITEM"),
+                    name: "Products grid",
+                    link: "devices-products-grid"
+                },
+                {
+                    key: genKey("MENU_SUB_ITEM"),
                     name: "Companies",
                     link: "devices-companies"
                 },
@@ -57,24 +62,6 @@ export default () => ({
         },
         {
             key: genKey("MENU_ITEM"),
-            name: "Product Grids",
-            link: "#",
-            icon: "reorder",
-            children: [
-                {
-                    key: genKey("MENU_SUB_ITEM"),
-                    name: "Carriers",
-                    link: "#"
-                },
-                {
-                    key: genKey("MENU_SUB_ITEM"),
-                    name: "Sizes",
-                    link: "#"
-                }
-            ]
-        },
-        {
-            key: genKey("MENU_ITEM"),
             name: "Shipping",
             link: "#",
             icon: "local_shipping",
@@ -85,13 +72,6 @@ export default () => ({
             name: "Settings",
             link: "#",
             icon: "settings",
-            children: null
-        },
-        {
-            key: genKey("MENU_ITEM"),
-            name: "Users",
-            link: "#",
-            icon: "supervisor_account",
             children: null
         }
     ]

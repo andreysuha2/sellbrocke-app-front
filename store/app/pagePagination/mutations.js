@@ -22,7 +22,9 @@ export default {
         if(item) state.items.push(item);
     },
     setPagination(state, pagination) {
-        if(!state.id || pagination.path !== state.pagination.path) state.id = genKey("APP_PAGINATION");
+        if(!state.id || pagination.path !== state.pagination.path) {
+            state.id = genKey("APP_PAGINATION");
+        }
         state.pagination = camelizeObject(pagination);
     },
     clearPagination(state) {

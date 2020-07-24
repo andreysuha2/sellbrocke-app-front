@@ -3,7 +3,7 @@ import { mapMutations, mapState, mapGetters } from "vuex";
 export default {
     watchQuery: [ "page" ],
     data() {
-        return { pagePaginationId: null };
+        return { pagePaginationId: this.currentPaginationId };
     },
     computed: {
         ...mapState("app/pagePagination", {
@@ -49,13 +49,11 @@ export default {
             this.redirectFromLastEmptyPage();
         }
     },
-    beforeCreate() {
-        dl.log("test");
-    },
     created() {
         this.pagePaginationId = this.currentPaginationId;
     },
     beforeRouteLeave(to, from, next) {
+        dl.log("change");
         if(this.currentPaginationId === this.pagePaginationId) {
             this.clearPaginate();
         }

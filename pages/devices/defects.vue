@@ -81,7 +81,6 @@ export default {
     },
     async fetch({ store, route, redirect }) {
         try {
-            dl.log("fetch defects");
             const { page } = route.query;
             await store.dispatch("defects/loadDefects", page);
             const { currentPage, lastPage } = store.state.app.pagePagination.pagination;
