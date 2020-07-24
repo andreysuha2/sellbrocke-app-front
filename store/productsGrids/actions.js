@@ -19,7 +19,7 @@ export default {
             http.productGrid.create(data)
                 .then((resp) => {
                     const { productGrid } = resp.data;
-                    if(currentPage !== 1) dispatch("loadDevices", currentPage);
+                    if(currentPage !== 1) dispatch("loadProductsGrids", currentPage);
                     resolve(productGrid);
                 }).catch((e) => reject(e));
         });
@@ -30,6 +30,15 @@ export default {
                 .then((resp) => {
                     const { productGrid } = resp.data;
                     resolve(productGrid);
+                }).catch((e) => reject(e));
+        });
+    },
+    removeProductGrid({ getters }, id) {
+        return new Promise((resolve, reject) => {
+            http.productGrid.delete(id, { lastProductGridId: getters.lastProductGridId })
+                .then((resp) => {
+                    const { data } = resp;
+                    resolve(data);
                 }).catch((e) => reject(e));
         });
     }

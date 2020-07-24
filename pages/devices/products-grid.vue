@@ -64,6 +64,12 @@
             @addProductGrid="addPaginateItem($event)"
             @closePopup="showCreatePopup = false"
             :show-popup="showCreatePopup"/>
+        <md-dialog-confirm
+            :md-active.sync="showDeleteConfirmation"
+            :md-content='`Do you whant delete product grid "${deletedProductGridData.name}"?`'
+            @md-cancel="cancelDelete"
+            @md-confirm="confirmDelete"
+            md-title="Delete product grid"/>
     </app-page>
 </template>
 
@@ -71,7 +77,7 @@
 import paginationMixin from "@mixins/pages/pagination";
 import CreationPopup from "@components/productsGrids/CreationPopup";
 import UpdatePopup from "@components/productsGrids/UpdatePopup";
-import { mapGetters, mapState, mapMutations } from "vuex";
+import { mapGetters, mapState, mapMutations, mapActions } from "vuex";
 
 export default {
     mixins: [ paginationMixin ],
@@ -90,7 +96,14 @@ export default {
         }
     },
     data() {
-        return { showCreatePopup: false };
+        return {
+            showCreatePopup: false,
+            showDeleteConfirmation: false,
+            deletedProductGridData: {
+                id: null,
+                name: null
+            }
+        };
     },
     computed: {
         ...mapState("app/pagePagination", { productsGrids: "items" }),
@@ -101,7 +114,29 @@ export default {
         ...mapMutations("productsGrids/currentProductGrid", {
             selectProductGrid: "enableProductGrid",
             clearProductGrid: "disableProductGrid"
-        })
+        }),
+        ...mapActions("productsGrids", { deleteProductGrid: "removeProductGrid" }),
+        removeConfirmation({ id, name }) {
+            this.deletedProductGridData.id = id;
+            this.deletedProductGridData.name = name;
+            this.showDeleteConfirmation = true;
+        },
+        cancelDelete() {
+            this.showDeleteConfirmation = false;
+            this.deletedProductGridData.id = null;
+            this.deletedProductGridData.name = null;
+        },
+        confirmDelete() {
+            this.deleteProductGrid(this.deletedProductGridData.id)
+                .then(({ productGrid, nextProductGrid }) => {
+                    this.$notify({
+                        title: "Product grid deleted",
+                        text: `Product grid "${productGrid.name}" was deleted!`
+                    });
+                    this.removePaginateItem(productGrid.id, nextProductGrid);
+                }).catch((e) => this.handleServerErrors(e, "Delete product grid error"))
+                .finally(() => this.cancelDelete());
+        }
     }
 };
 </script>
