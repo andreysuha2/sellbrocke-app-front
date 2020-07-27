@@ -21,7 +21,6 @@
                     <md-table-head class="devices-list--id" md-numeric>ID</md-table-head>
                     <md-table-head>Name</md-table-head>
                     <md-table-head>Company</md-table-head>
-                    <md-table-head>Categories</md-table-head>
                     <md-table-head>Slug</md-table-head>
                     <md-table-head>Base price</md-table-head>
                     <md-table-head>Discounted price</md-table-head>
@@ -50,20 +49,6 @@
                             </div>
                         </nuxt-link>
                     </md-table-cell>
-                    <md-table-cell>
-                        <div class="flex flex-wrap devices-list--categories">
-                            <div
-                                v-for="category in device.categories"
-                                :key="category.id"
-                                class="devices-list--category">
-                                <nuxt-link
-                                    :to="{ name: 'devices-categories', query: { category: category.id } }"
-                                >
-                                    {{ category.name }}
-                                </nuxt-link>
-                            </div>
-                        </div>
-                    </md-table-cell>
                     <md-table-cell>{{ device.slug }}</md-table-cell>
                     <md-table-cell>{{ device.prices.base }}$</md-table-cell>
                     <md-table-cell>
@@ -71,7 +56,12 @@
                     </md-table-cell>
                     <md-table-cell>
                         <md-button
-                            @click="selectDevice(device.id)"
+                            @click="showDisplay(device.id)"
+                            class="devices-list--control md-icon-button md-raised">
+                            <md-icon>visibility</md-icon>
+                        </md-button>
+                        <md-button
+                            @click="showUpdate(device.id)"
                             class="devices-list--control md-icon-button md-raised">
                             <md-icon>edit</md-icon>
                         </md-button>
@@ -99,11 +89,15 @@
             :md-active.sync="showCreatePopup"
             md-title="Prevent create device!"
             :md-content="emptyDescription" />
-        <update-device
-            v-if="hasCurrentDevice && hasDevices"
-            @updateDevice="updatePaginateItem($event)"
-            @closePopup="closeDevice"
-            :show-popup="hasCurrentDevice"/>
+        <template v-if="hasCurrentDevice && hasDevices">
+            <update-device
+                @updateDevice="updatePaginateItem($event)"
+                @closePopup="showUpdate(false)"
+                :show-popup="isUpdate"/>
+            <display-device
+                @closePopup="showDisplay(false)"
+                :show-popup="isDisplay"/>
+        </template>
         <md-dialog-confirm
             v-if="hasDevices"
             :md-active.sync="showDeleteConfirmation"
@@ -117,6 +111,7 @@
 <script>
 import CreationPopup from "@components/devices/CreationPopup";
 import UpdatePopup from "@components/devices/UpdatePopup";
+import DisplayPopup from "@components/devices/DisplayPopup";
 import { mapGetters, mapState, mapMutations, mapActions } from "vuex";
 import paginationMixin from "@mixins/pages/pagination";
 
@@ -134,12 +129,15 @@ export default {
     },
     components: {
         "create-device": CreationPopup,
-        "update-device": UpdatePopup
+        "update-device": UpdatePopup,
+        "display-device": DisplayPopup
     },
     data() {
         return {
             showCreatePopup: false,
             showDeleteConfirmation: false,
+            showUpdatePopup: false,
+            showDisplayPopup: false,
             deletedDeviceData: {
                 id: null,
                 name: null
@@ -155,6 +153,12 @@ export default {
         ...mapGetters("devices/currentDevice", { hasCurrentDevice: "hasCurrentDevice" }),
         emptyDescription() {
             return this.canCreate ? "Create device to start you business" : "You must created categories and companies before create devices";
+        },
+        isUpdate() {
+            return this.showUpdatePopup && this.hasCurrentDevice;
+        },
+        isDisplay() {
+            return this.showDisplayPopup && this.hasCurrentDevice;
         }
     },
     methods: {
@@ -183,6 +187,24 @@ export default {
                     this.removePaginateItem(device.id, nextDevice);
                 }).catch((e) => this.handleServerErrors(e, "Delete device error"))
                 .finally(() => this.cancelDelete());
+        },
+        showUpdate(id) {
+            if(id !== false) {
+                this.selectDevice(id);
+                this.showUpdatePopup = true;
+            } else {
+                this.showUpdatePopup = false;
+                this.closeDevice();
+            }
+        },
+        showDisplay(id) {
+            if(id !== false) {
+                this.selectDevice(id);
+                this.showDisplayPopup = true;
+            } else {
+                this.showDisplayPopup = false;
+                this.closeDevice();
+            }
         }
     }
 };
