@@ -24,6 +24,7 @@
                     <md-table-head>Slug</md-table-head>
                     <md-table-head>Base price</md-table-head>
                     <md-table-head>Discounted price</md-table-head>
+                    <md-table-head>Use Products Grids</md-table-head>
                     <md-table-head>Controls</md-table-head>
                 </md-table-row>
                 <md-table-row v-for="device in devices" :key="device.id">
@@ -53,6 +54,13 @@
                     <md-table-cell>{{ device.prices.base }}$</md-table-cell>
                     <md-table-cell>
                         {{ device.prices.discounted }}$ ({{ device.company.priceReduction }}%)
+                    </md-table-cell>
+                    <md-table-cell>
+                        <md-icon class="md-primary"
+                                 v-if="device.useProductsGrids">done</md-icon>
+                        <md-icon
+                            class="md-accent"
+                            v-else>close</md-icon>
                     </md-table-cell>
                     <md-table-cell>
                         <md-button
