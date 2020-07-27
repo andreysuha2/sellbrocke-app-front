@@ -68,6 +68,39 @@
                     {{ category.name }}
                 </md-option>
             </app-select>
+            <md-checkbox v-model="useProductsGrids" class="md-primary">Use products grids</md-checkbox>
+            <template v-if="useProductsGrids">
+                <app-select
+                    required
+                    multiple
+                    v-model="productsGridsCarriers"
+                    validate-name="products-grids-carriers"
+                    validate-rules="required"
+                    placeholder="Products grids carriers"
+                    display-error-name="Products grids carrier">
+                    <md-option
+                        :key="carrier.id"
+                        :value="carrier.id"
+                        v-for="carrier in carriersList">
+                        {{ carrier.name }}
+                    </md-option>
+                </app-select>
+                <app-select
+                    required
+                    multiple
+                    v-model="productsGridsSizes"
+                    validate-name="products-grids-sizes"
+                    validate-rules="required"
+                    placeholder="Products grids sizes"
+                    display-error-name="Products grids sizes">
+                    <md-option
+                        :key="size.id"
+                        :value="size.id"
+                        v-for="size in sizesList">
+                        {{ size.name }}
+                    </md-option>
+                </app-select>
+            </template>
             <app-textarea
                 v-model="description"
                 validate-name="description"
@@ -87,13 +120,15 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import popupMixin from "@mixins/ControlPopup";
 
 export default {
     mixins: [ popupMixin ],
     data() {
         return {
+            carriers: [],
+            sizes: [],
             tempDefault: {
                 thumbnail: null,
                 name: null,
@@ -101,7 +136,9 @@ export default {
                 description: null,
                 categories: [],
                 company: null,
-                basePrice: null
+                basePrice: null,
+                useProductsGrids: 0,
+                productsGrids: []
             }
         };
     },
@@ -109,6 +146,10 @@ export default {
         ...mapState("devices", {
             companiesList: "companies",
             categoriesList: "categories"
+        }),
+        ...mapGetters("devices", {
+            carriersList: "productsGridsCarriers",
+            sizesList: "productsGridsSizes"
         }),
         categories: {
             get() { return this.temp.categories; },
@@ -140,6 +181,24 @@ export default {
         description: {
             get() { return this.temp.description; },
             set(desc) { this.setField("description", desc); }
+        },
+        useProductsGrids: {
+            get() { return Boolean(this.temp.useProductsGrids); },
+            set(state) { this.setField("useProductsGrids", Number(state)); }
+        },
+        productsGridsCarriers: {
+            get() { return this.carriers; },
+            set(carriers) {
+                this.carriers = carriers;
+                this.setField("productsGrids", [ ...this.sizes, ...carriers ], true);
+            }
+        },
+        productsGridsSizes: {
+            get() { return this.sizes; },
+            set(sizes) {
+                this.sizes = sizes;
+                this.setField("productsGrids", [ ...this.carriers, ...sizes ], true);
+            }
         }
     },
     methods: {

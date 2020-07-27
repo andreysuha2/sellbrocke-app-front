@@ -28,14 +28,22 @@
                     <md-table-head>Controls</md-table-head>
                 </md-table-row>
                 <md-table-row v-for="device in devices" :key="device.id">
-                    <md-table-cell class="device-list--id" md-numeric>{{ device.id }}</md-table-cell>
-                    <md-table-cell>{{ device.name }}</md-table-cell>
+                    <md-table-cell class="devices-list--id" md-numeric>{{ device.id }}</md-table-cell>
+                    <md-table-cell>
+                        <div class="flex items-center">
+                            <div class="devices-list--thumbnail"
+                                :style="{ backgroundImage: `url(${device.thumbnail})` }">
+                            </div>
+                            <span>{{ device.name }}</span>
+                        </div>
+                    </md-table-cell>
                     <md-table-cell>
                         <nuxt-link
                             :to="{ name: 'devices-companies', query: { company: device.company.id } }"
                             class="device-list-company flex items-center">
-                            <div class="device-list-company--image flex items-center">
-                                <img :src="device.company.logo" alt="">
+                            <div
+                                :style="{ backgroundImage: `url(${device.company.logo})` }"
+                                class="devices-list--thumbnail">
                             </div>
                             <div class="device-list-company--name">
                                 <span>{{ device.company.name }}</span>
@@ -200,6 +208,15 @@ export default {
 
     &--control:not(:last-child) {
         margin-right: 10px;
+    }
+
+    &--thumbnail {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
     }
 }
 
