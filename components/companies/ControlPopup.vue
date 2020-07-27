@@ -49,6 +49,7 @@
                         class="md-primary md-raised">Update</md-button>
                     <md-button
                         @click="showDeleteConfirmation = true"
+                        :disabled="Boolean(storeData.devicesCount)"
                         class="md-primary md-accent md-raised">Delete</md-button>
                     <md-button
                         @click="$emit('closePopup')"

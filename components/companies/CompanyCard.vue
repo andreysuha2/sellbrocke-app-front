@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import { randomNumber } from "@helpers/generators";
-
 export default {
     props: {
         id: {
@@ -50,10 +48,11 @@ export default {
         slug: {
             type: String,
             required: true
+        },
+        devicesCount: {
+            type: Number,
+            required: true
         }
-    },
-    data() {
-        return { devicesCount: randomNumber(0, 1000) };
     },
     computed: {
         logoBg() {

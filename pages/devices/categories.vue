@@ -38,10 +38,16 @@
                     </md-table-cell>
                     <md-table-cell>{{ category.name }}</md-table-cell>
                     <md-table-cell>
-                        <span class="categories-list--defect" v-for="defect in category.defects"
-                            :key="`${category.id}.${defect.id}`">{{ defect.name }}</span>
+                        <div class="categories-list--defects flex flex-wrap">
+                            <span class="categories-list--defect" v-for="defect in category.defects"
+                                  :key="`${category.id}.${defect.id}`">{{ defect.name }}</span>
+                        </div>
                     </md-table-cell>
-                    <md-table-cell>{{ category.description }}</md-table-cell>
+                    <md-table-cell>
+                        <p class="categories-list--description">
+                            {{ category.description }}
+                        </p>
+                    </md-table-cell>
                     <md-table-cell>
                         <md-button
                             @click="toCategory(category.id)"
@@ -62,7 +68,7 @@
             :show-popup="showCreatePopup"/>
         <md-dialog-alert
             :md-active.sync="deleteData.showAlert"
-            md-content="You cant remove category with child categories and attached devices!"/>
+            md-content="You cant remove category with child categories and/or attached devices!"/>
         <md-dialog-confirm
             :md-active.sync="deleteData.showConfirm"
             md-title='Remove category'
@@ -128,8 +134,7 @@ export default {
             if(this.category && this.category.id === id) category = this.category;
             else category = this.categories.find((category) => category.id === id);
             if(category) {
-                // TODO: check related devices
-                if(category.descendantsCount) this.deleteData.showAlert = true;
+                if(category.descendantsCount || category.devicesCount) this.deleteData.showAlert = true;
                 else {
                     this.deleteData.id = category.id;
                     this.deleteData.name = category.name;
@@ -183,6 +188,14 @@ export default {
 
         &--control:not(:last-child) {
             margin-right: 10px;
+        }
+
+        &--defects {
+            max-width: 300px;
+        }
+
+        &--description {
+            max-width: 500px;
         }
 
         &--defect {

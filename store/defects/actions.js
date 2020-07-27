@@ -5,44 +5,39 @@ export default {
         return new Promise((resolve, reject) => {
             http.getDefects(page)
                 .then((resp) => {
-                    const { data } = resp;
-                    commit("setDefects", data);
-                    resolve(data);
+                    const { defects, meta } = resp.data;
+                    commit("app/pagePagination/setItems", defects, { root: true });
+                    commit("app/pagePagination/setPagination", meta, { root: true });
+                    resolve(defects);
                 }).catch((e) => reject(e));
         });
     },
-    createDefect({ commit, state, dispatch }, data) {
+    createDefect({ dispatch, rootState }, data) {
         return new Promise((resolve, reject) => {
+            const { currentPage } = rootState.app.pagePagination.pagination;
             http.defect.create(data)
                 .then((resp) => {
                     const { defect } = resp.data;
-                    if(state.meta.currentPage === 1) {
-                        commit("addDefect", defect);
-                        commit("recalculateMeta", 1);
-                    } else dispatch("loadDefects", state.meta.currentPage);
+                    if(currentPage !== 1) dispatch("loadDefects", currentPage);
                     resolve(defect);
                 }).catch(e => reject(e));
         });
     },
-    updateDefect({ commit }, { id, data }) {
+    updateDefect({}, { id, data }) {
         return new Promise((resolve, reject) => {
             http.defect.update(id, data)
                 .then((resp) => {
                     const { defect } = resp.data;
-                    commit("updateDefect", defect);
                     resolve(defect);
                 }).catch((e) => reject(e));
         });
     },
-    deleteDefect({ commit, getters }, id) {
+    deleteDefect({ getters }, id) {
         return new Promise((resolve, reject) => {
             http.defect.delete(id, { lastDefectId: getters.lastDefectId })
                 .then((resp) => {
-                    const { defect, nextDefect } = resp.data;
-                    commit("deleteDefect", id);
-                    commit("recalculateMeta", -1);
-                    if(nextDefect) commit("addNextDefect", nextDefect);
-                    resolve(defect);
+                    const { data } = resp;
+                    resolve(data);
                 }).catch(e => reject(e));
         });
     }

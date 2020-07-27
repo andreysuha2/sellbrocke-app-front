@@ -72,6 +72,12 @@ export default {
             selectCompany: "startControl",
             closeCompany: "stopControl"
         })
+    },
+    created() {
+        if(this.$route.query.company) {
+            const { company: id } = this.$route.query;
+            this.selectCompany(Number(id));
+        }
     }
 };
 </script>

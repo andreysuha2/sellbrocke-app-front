@@ -13,7 +13,9 @@ class Authenticate {
     }
 
     set token(token) {
-        this._cookies.set(this._tokenPropName, token);
+        const now = new Date(),
+            expiresAt = new Date((new Date()).setFullYear(now.getFullYear() + 1));
+        this._cookies.set(this._tokenPropName, token, { expires: expiresAt });
     }
 
     // set global access to cookies install in cookieResolve plugin
