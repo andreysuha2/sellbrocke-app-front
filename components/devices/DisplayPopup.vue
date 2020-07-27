@@ -93,7 +93,7 @@
                     <span
                         v-for="size in device.productsGrids.sizes"
                         :key="size.id"
-                        class="display-popup-list-item">{{ size.name }}</span>
+                        class="display-popup--cell-list-item">{{ size.name }}</span>
                     </div>
                 </div>
             </template>
