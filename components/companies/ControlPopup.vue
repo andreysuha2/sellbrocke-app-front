@@ -12,7 +12,6 @@
                 form-name="control-company">
                 <app-file
                     v-model="logo"
-                    required
                     accept="image/*"
                     validate-name="logo"
                     display-error-name="company logo"
