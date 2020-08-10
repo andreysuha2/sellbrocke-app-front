@@ -11,6 +11,13 @@ export default () => ({
         },
         {
             key: genKey("MENU_ITEM"),
+            name: "Customers",
+            link: "customers",
+            icon: "people",
+            children: null
+        },
+        {
+            key: genKey("MENU_ITEM"),
             name: "Orders",
             link: "#",
             icon: "assignment",
