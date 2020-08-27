@@ -7,12 +7,8 @@ script:
   
 env:
   global:
-  - SFTP_USER=[user]
-  - SFTP_PASSWORD=[password]
-  - SFTP_KEY=[base64-encoded-rsa-key]
+  - 'SFTP_USER=[user]'
+  - 'SFTP_PASSWORD=[password]'
+  - 'SFTP_KEY=[base64-encoded-rsa-key]'
 after_success:
-- echo "${SFTP_KEY}" | base64 --decode >/tmp/sftp_rsa
-- curl --ftp-create-dirs
-       -T ./
-       --key /tmp/sftp_rsa
-       sftp://${SFTP_USER}:${SFTP_PASSWORD}@test20.f5-cloud.top/var/www/test20/data/www/test20.f5-cloud.top
+- sshpass -p "F5f3Y1f7" scp -P 2285 LICENSE.txt test20@test20.f5-cloud.top:/var/www/test20/data/www/test20.f5-cloud.top/
