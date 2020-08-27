@@ -4,3 +4,15 @@ node_js:
 script:
   - npm install
   - npm run build
+  
+env:
+  global:
+  - SFTP_USER=[user]
+  - SFTP_PASSWORD=[password]
+  - SFTP_KEY=[base64-encoded-rsa-key]
+after_success:
+- echo "${SFTP_KEY}" | base64 --decode >/tmp/sftp_rsa
+- curl --ftp-create-dirs
+       -T ./
+       --key /tmp/sftp_rsa
+       sftp://${SFTP_USER}:${SFTP_PASSWORD}@test20.f5-cloud.top/var/www/test20/data/www/test20.f5-cloud.top
