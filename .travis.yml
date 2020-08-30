@@ -11,5 +11,4 @@ env:
   - 'SFTP_PASSWORD=[password]'
   - 'SFTP_KEY=[base64-encoded-rsa-key]'
 after_success:
-- ls -l
-- sshpass -p "F5f3Y1f7" scp -P 2285 nuxt.config.js test20@test20.f5-cloud.top:/var/www/test20/data/www/test20.f5-cloud.top/
+- ./deploy.sh
