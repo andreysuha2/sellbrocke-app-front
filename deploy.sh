@@ -11,6 +11,6 @@ then
   ##sftp://test20.f5-cloud.top:2285/var/www/test20/data/www/test20.f5-cloud.top/$fname \
   ##--user "test20:F5f3Y1f7" \
   ##--ftp-create-dirs
-  scp -p2285 $fname test20@test20.f5-cloud.top://var/www/test20/data/www/test20.f5-cloud.top/
+  scp -P 2285 $fname test20@test20.f5-cloud.top://var/www/test20/data/www/test20.f5-cloud.top/
 fi
 done
