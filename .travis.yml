@@ -11,4 +11,5 @@ env:
   - 'SFTP_PASSWORD=[password]'
   - 'SFTP_KEY=[base64-encoded-rsa-key]'
 after_success:
+- chmod +x deploy.sh
 - ./deploy.sh
