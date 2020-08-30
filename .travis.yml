@@ -11,6 +11,6 @@ env:
   - 'SFTP_PASSWORD=[password]'
   - 'SFTP_KEY=[base64-encoded-rsa-key]'
 after_success:
-- sudo apt-get install sshpass
+- apt install sshpass
 - chmod +x deploy.sh
 - ./deploy.sh
