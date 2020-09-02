@@ -17,10 +17,6 @@ PS1=$'\\u2605'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-echo -e "${PS1} deploy: ${GREEN}stop daemon${NC}"
-pm2 stop $APP_NAME 1> /dev/null
-pm2 delete $APP_NAME 1> /dev/null
-
 cd $BASE_DIR
 
 if ! [ -d releases ]
@@ -55,6 +51,10 @@ npm install &> /dev/null
 
 echo -e "${PS1} npm: ${GREEN}build${NC}"
 npm run build &> /dev/null
+
+echo -e "${PS1} deploy: ${GREEN}stop daemon${NC}"
+pm2 stop $APP_NAME 1> /dev/null
+pm2 delete $APP_NAME 1> /dev/null
 
 echo -e "${PS1} deploy: ${GREEN}start daemon${NC}"
 pm2 start npm --name $APP_NAME -- start
