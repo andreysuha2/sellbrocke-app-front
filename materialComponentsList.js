@@ -12,5 +12,6 @@ module.exports = [
     "MdProgress",
     "MdMenu",
     "MdList",
-    "MdCheckbox"
+    "MdCheckbox",
+    "MdTabs"
 ];

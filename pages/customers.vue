@@ -1,12 +1,12 @@
 <template>
-    <app-page title="Customers">
+    <app-page v-if="isCurrentPaginateItems" title="Customers">
         <md-empty-state
             v-if="!hasCustomers"
             md-icon="people"
             md-label="Your merchants customers"
             md-description="Here will showing customers from your merchants">
         </md-empty-state>
-        <md-table class="customers-list">
+        <md-table v-else class="customers-list">
             <md-table-row>
                 <md-table-head class="customers-list--id" md-numeric>ID</md-table-head>
                 <md-table-head>Merchant</md-table-head>
