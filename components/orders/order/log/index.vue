@@ -20,7 +20,7 @@ import { mapState } from "vuex";
 export default {
     filters: {
         logDate(timestamp) {
-            return moment(timestamp).format("Y-MM-D H:mm:ss");
+            return moment(timestamp).format("Y-MM-DD H:mm:ss");
         }
     },
     computed: { ...mapState("orders/order", { logs: (state) => state.order.log }) }

@@ -32,7 +32,9 @@
                 </md-table-cell>
                 <md-table-cell>{{ order.prices.base }}$</md-table-cell>
                 <md-table-cell>{{ order.prices.discounted }}$</md-table-cell>
-                <md-table-cell>{{ order.date | orderDate }}</md-table-cell>
+                <md-table-cell>
+                    <div class="orders-list--date">{{ order.date | orderDate }}</div>
+                </md-table-cell>
                 <md-table-cell>
                     <md-button
                         @click="viewOrder(order.id)"
@@ -96,6 +98,10 @@ export default {
     .orders-list {
         &--id {
             width: 100px;
+        }
+
+        &--date {
+            min-width: 129px;
         }
 
         &--status {

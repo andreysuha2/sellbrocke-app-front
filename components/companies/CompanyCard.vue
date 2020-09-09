@@ -80,9 +80,22 @@ export default {
             left: 20px;
         }
     }
+
+    @include max-w(1660px) {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 .card-info {
+    @include max-w(1660px) {
+        margin: {
+            left: 0;
+            top: 15px;
+        };
+        width: 100%;
+    }
+
     &--row:not(:last-child) {
         margin-bottom: 5px;
     }

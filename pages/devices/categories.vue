@@ -49,16 +49,18 @@
                         </p>
                     </md-table-cell>
                     <md-table-cell>
-                        <md-button
-                            @click="toCategory(category.id)"
-                            class="categories-list--control md-icon-button md-raised">
-                            <md-icon>edit</md-icon>
-                        </md-button>
-                        <md-button
-                            @click="deleteCategoryConfirm(category.id)"
-                            class="categories-list--control md-icon-button md-raised">
-                            <md-icon>delete</md-icon>
-                        </md-button>
+                        <div class="categories-list--controls">
+                            <md-button
+                                @click="toCategory(category.id)"
+                                class="categories-list--control md-icon-button md-raised">
+                                <md-icon>edit</md-icon>
+                            </md-button>
+                            <md-button
+                                @click="deleteCategoryConfirm(category.id)"
+                                class="categories-list--control md-icon-button md-raised">
+                                <md-icon>delete</md-icon>
+                            </md-button>
+                        </div>
                     </md-table-cell>
                 </md-table-row>
             </md-table>
@@ -206,6 +208,10 @@ export default {
                     content: ',';
                 }
             }
+        }
+
+        &--controls {
+            min-width: 150px;
         }
     }
 </style>

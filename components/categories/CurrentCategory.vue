@@ -83,6 +83,11 @@ export default {
     &--image {
         margin-right: 40px;
     }
+
+    &--control {
+        min-width: 180px;
+        margin-left: 10px;
+    }
 }
 .category-image {
     max-width: 150px;

@@ -4,7 +4,7 @@
     <app-header/>
     <div class="flex app--wrapper">
         <div class="app--menu">
-            <app-menu/>
+            <app-menu ref="appMenu"/>
         </div>
         <div class="app--content flex flex-col">
             <main class="app--main">
@@ -50,12 +50,14 @@ export default {
 
     &--content {
         width: 100%;
+        overflow: auto;
     }
 
     &--main {
         padding: 20px;
         overflow-y: scroll;
         flex: 1 0 auto;
+        max-width: 100%;
         max-height: calc(100vh - 140px);
     }
 

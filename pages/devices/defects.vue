@@ -31,16 +31,18 @@
                         <p class="defects-list--description">{{ defect.description }}</p>
                     </md-table-cell>
                     <md-table-cell>
-                        <md-button
-                            @click="openUpdatePopup(defect.id)"
-                            class="defects-list--control md-icon-button md-raised">
-                            <md-icon>edit</md-icon>
-                        </md-button>
-                        <md-button
-                            @click="removeConfirmation(defect)"
-                            class="defects-list--control md-icon-button md-raised">
-                            <md-icon>delete</md-icon>
-                        </md-button>
+                        <div class="defects-list--controls">
+                            <md-button
+                                @click="openUpdatePopup(defect.id)"
+                                class="defects-list--control md-icon-button md-raised">
+                                <md-icon>edit</md-icon>
+                            </md-button>
+                            <md-button
+                                @click="removeConfirmation(defect)"
+                                class="defects-list--control md-icon-button md-raised">
+                                <md-icon>delete</md-icon>
+                            </md-button>
+                        </div>
                     </md-table-cell>
                 </md-table-row>
             </md-table>
@@ -146,6 +148,10 @@ export default {
         &--description {
             margin: 0;
             max-width: 800px;
+        }
+
+        &--controls {
+            min-width: 150px;
         }
     }
 

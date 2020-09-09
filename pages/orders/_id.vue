@@ -165,7 +165,7 @@ export default {
             return this.order.devices.length;
         },
         date() {
-            return moment(this.order.date).format("MMM, D Y H:mm");
+            return moment(this.order.date).format("MMM, DD Y H:mm");
         },
         customer() {
             return this.order.customer;

@@ -63,21 +63,23 @@
                             v-else>close</md-icon>
                     </md-table-cell>
                     <md-table-cell>
-                        <md-button
-                            @click="showDisplay(device.id)"
-                            class="devices-list--control md-icon-button md-raised">
-                            <md-icon>visibility</md-icon>
-                        </md-button>
-                        <md-button
-                            @click="showUpdate(device.id)"
-                            class="devices-list--control md-icon-button md-raised">
-                            <md-icon>edit</md-icon>
-                        </md-button>
-                        <md-button
-                            @click="removeConfirmation(device)"
-                            class="devices-list--control md-icon-button md-raised">
-                            <md-icon>delete</md-icon>
-                        </md-button>
+                        <div class="devices-list--controls">
+                            <md-button
+                                @click="showDisplay(device.id)"
+                                class="devices-list--control md-icon-button md-raised">
+                                <md-icon>visibility</md-icon>
+                            </md-button>
+                            <md-button
+                                @click="showUpdate(device.id)"
+                                class="devices-list--control md-icon-button md-raised">
+                                <md-icon>edit</md-icon>
+                            </md-button>
+                            <md-button
+                                @click="removeConfirmation(device)"
+                                class="devices-list--control md-icon-button md-raised">
+                                <md-icon>delete</md-icon>
+                            </md-button>
+                        </div>
                     </md-table-cell>
                 </md-table-row>
             </md-table>
@@ -247,6 +249,10 @@ export default {
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center center;
+    }
+
+    &--controls {
+        min-width: 174px;
     }
 }
 
