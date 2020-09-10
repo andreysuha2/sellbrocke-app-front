@@ -8,5 +8,11 @@ export default {
     updateOrderStatus(state, { status, log }) {
         state.order.status = status;
         state.order.log = log;
+    },
+    setCurrentDevice(state, id) {
+        state.currentDeviceId = id;
+    },
+    cancelCurrentDevice(state) {
+        state.currentDeviceId = null;
     }
 };

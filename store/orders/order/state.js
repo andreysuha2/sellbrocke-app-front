@@ -1,1 +1,4 @@
-export default () => ({ order: null });
+export default () => ({
+    order: null,
+    currentDeviceId: null
+});
