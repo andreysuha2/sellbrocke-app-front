@@ -8,6 +8,15 @@ class MerchantsHTTP extends Http {
     loadAll() {
         return this.query.get();
     }
+
+    get merchant() {
+        return this.group("merchant", (query) => ({
+            updatePassword(merchantId, data) {
+                data.set("_method", "PUT");
+                return query.post(`${merchantId}/update-password`, data);
+            }
+        }));
+    }
 }
 
 export default new MerchantsHTTP();

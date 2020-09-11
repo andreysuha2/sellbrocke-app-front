@@ -66,9 +66,6 @@ export default {
             if(this.canOpen) this.$router.push({ name: this.link });
             this.subOpen = !this.subOpen;
         }
-    },
-    mounted() {
-        dl.log(this.$route, this.link);
     }
 };
 </script>

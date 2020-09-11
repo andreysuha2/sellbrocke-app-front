@@ -17,19 +17,24 @@
                 <md-table-cell>{{ merchant.login }}</md-table-cell>
                 <md-table-cell>
                     <md-button
-                        @click="updatePassword"
+                        @click="openUpdatePassword(merchant.id)"
                         class="md-raised md-primary">Update password</md-button>
                 </md-table-cell>
             </md-table-row>
         </md-table>
+        <update-password
+            @closePopup="closeUpdatePassword"
+            :show-popup="showUpdatePassword"/>
     </app-page>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
+import UpdatePasswordPopup from "@components/merchants/UpdatePasswordPopup";
 
 export default {
     name: "MerchantsPage",
+    components: { "update-password": UpdatePasswordPopup },
     async fetch({ store }) {
         try {
             await store.dispatch("merchants/loadList");
@@ -37,10 +42,19 @@ export default {
             dl.error(e);
         }
     },
+    data() {
+        return { showUpdatePassword: false };
+    },
     computed: { ...mapState("merchants", { merchants: "list" }) },
     methods: {
-        updatePassword() {
-            this.$notify({ text: "Coming soon", duration: 3000 });
+        ...mapMutations("merchants/merchant", [ "setMerchant", "cancelMerchant" ]),
+        openUpdatePassword(id) {
+            this.setMerchant(id);
+            this.showUpdatePassword = true;
+        },
+        closeUpdatePassword() {
+            this.cancelMerchant();
+            this.showUpdatePassword = false;
         }
     }
 };
