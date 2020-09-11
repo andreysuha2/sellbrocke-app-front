@@ -5,7 +5,7 @@
             class="md-icon-button md-raised">
             <md-icon>exit_to_app</md-icon>
         </md-button>
-        <md-button class="menu--avatar md-icon-button md-raised">
+        <md-button @click="toAccount" class="menu--avatar md-icon-button md-raised">
             <md-icon>person</md-icon>
         </md-button>
         <span class="menu--name">{{ name }}</span>
@@ -22,6 +22,9 @@ export default {
         logout() {
             auth.logout()
                 .then(() => this.$router.go("/login"));
+        },
+        toAccount() {
+            this.$router.push({ name: "account" });
         }
     }
 };
