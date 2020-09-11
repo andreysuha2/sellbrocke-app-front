@@ -1,5 +1,6 @@
 <template>
-    <div class="sub-item">
+    <div :class="{ 'sub-item__active': isCurrent }"
+        class="sub-item">
         <span @click="navigate">{{ name }}</span>
     </div>
 </template>
@@ -16,10 +17,18 @@ export default {
             required: true
         }
     },
+    computed: {
+        isCurrent() {
+            return this.link === this.$route.name;
+        }
+    },
     methods: {
         navigate() {
             if(this.link !== "#") this.$router.push({ name: this.link });
         }
+    },
+    mounted() {
+        dl.log(this.$route, this.link);
     }
 };
 </script>
@@ -27,6 +36,11 @@ export default {
 <style lang="scss" scoped>
 .sub-item {
     cursor: pointer;
+    color: $appBg;
+
+    &__active {
+        color: $appColor3;
+    }
 
     &:not(:last-child) {
         margin-bottom: 5px;

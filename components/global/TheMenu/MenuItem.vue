@@ -1,11 +1,13 @@
 <template>
-    <div class="menu-item">
+    <div
+        :class="{ 'menu-item__active': isActive }"
+        class="menu-item">
         <div v-on-click-out="closeSub"
              @click="navigate" class="menu-item--item flex items-center items-center">
             <md-icon class="menu-item--icon">{{ icon }}</md-icon>
             <span class="menu-item--text">{{ name }}</span>
         </div>
-        <div v-if="children && subOpen" class="menu-item--sub-menu">
+        <div v-if="children && (subOpen || isSubCurrent)" class="menu-item--sub-menu">
             <child-item
                 v-for="item in children"
                 v-bind="item"
@@ -45,6 +47,15 @@ export default {
     computed: {
         canOpen() {
             return this.link !== "#" && (!this.children || this.subOpen);
+        },
+        isCurrent() {
+            return this.link === this.$route.name;
+        },
+        isSubCurrent() {
+            return this.children && this.children.find((child) => child.link === this.$route.name);
+        },
+        isActive() {
+            return this.isCurrent || this.isSubCurrent;
         }
     },
     methods: {
@@ -55,6 +66,9 @@ export default {
             if(this.canOpen) this.$router.push({ name: this.link });
             this.subOpen = !this.subOpen;
         }
+    },
+    mounted() {
+        dl.log(this.$route, this.link);
     }
 };
 </script>
@@ -67,7 +81,7 @@ export default {
         cursor: pointer;
     }
 
-    &--icon.md-icon {
+    .md-icon {
         color: $appBg;
         margin: 0;
     }
@@ -88,6 +102,14 @@ export default {
 
     &:not(:last-child) {
         margin-bottom: 20px;
+    }
+
+    &__active {
+        color: $appColor3;
+
+        .md-icon {
+            color: $appColor3;
+        }
     }
 }
 </style>
