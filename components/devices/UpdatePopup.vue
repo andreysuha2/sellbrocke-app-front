@@ -216,7 +216,7 @@ export default {
             },
             set(carriers) {
                 this.carriers = carriers;
-                this.setField("productsGrids", [ ...this.sizes, ...carriers ], true);
+                this.setField("productsGrids", [ ...this.productsGridsSizes, ...carriers ], true);
             }
         },
         productsGridsSizes: {
@@ -226,7 +226,7 @@ export default {
             },
             set(sizes) {
                 this.sizes = sizes;
-                this.setField("productsGrids", [ ...this.carriers, ...sizes ], true);
+                this.setField("productsGrids", [ ...this.productsGridsCarriers, ...sizes ], true);
             }
         }
     },
