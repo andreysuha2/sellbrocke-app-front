@@ -126,16 +126,8 @@ export default {
     mixins: [ popupMixin ],
     data() {
         return {
-            carriers: {
-                items: [],
-                attach: [],
-                detach: []
-            },
-            sizes: {
-                items: [],
-                attach: [],
-                detach: []
-            },
+            carriers: [],
+            sizes: [],
             tempDefault: {
                 thumbnail: null,
                 name: null,
@@ -147,8 +139,7 @@ export default {
                 attachCategories: [],
                 detachCategories: [],
                 description: null,
-                attachProductsGrids: [],
-                detachProductsGrids: []
+                productsGrids: []
             }
         };
     },
@@ -220,42 +211,22 @@ export default {
         },
         productsGridsCarriers: {
             get() {
-                const hasCarriers = this.carriers.items.length;
-                return hasCarriers || !this.storeCarriers ? this.carriers.items : this.storeCarriers;
+                const hasCarriers = this.carriers.length;
+                return hasCarriers || !this.storeCarriers ? this.carriers : this.storeCarriers;
             },
             set(carriers) {
-                this.carriers.items = carriers;
-                if(!this.storeCarriers) {
-                    this.setField("attachProductsGrids", [ ...carriers, ...this.sizes.items ], true);
-                } else {
-                    const { attached, detached } = listDiff(carriers, this.storeCarriers);
-                    if(attached) this.setField("attachProductsGrids", [ ...attached, ...this.sizes.attach ], true);
-                    else if(this.sizes.attach.length) this.setField("attachProductsGrids", this.sizes.attach, true);
-                    else this.clearField("attachProductsGrids");
-                    if(detached) this.setField("detachProductsGrids", [ ...detached, ...this.sizes.detach ], true);
-                    else if(this.sizes.detach.length) this.setField("detachProductsGrids", this.sizes.detach, true);
-                    else this.clearField("detachProductsGrids");
-                }
+                this.carriers = carriers;
+                this.setField("productsGrids", [ ...this.sizes, ...carriers ], true);
             }
         },
         productsGridsSizes: {
             get() {
-                const hasSizes = this.sizes.items.length;
-                return hasSizes || !this.storeCarriers ? this.sizes.items : this.storeSizes;
+                const hasSizes = this.sizes.length;
+                return hasSizes || !this.storeCarriers ? this.sizes : this.storeSizes;
             },
             set(sizes) {
-                this.sizes.items = sizes;
-                if(!this.storeSizes) {
-                    this.setField("attachProductsGrids", [ ...sizes, ...this.carriers.items ], true);
-                } else {
-                    const { attached, detached } = listDiff(sizes, this.storeSizes);
-                    if(attached) this.setField("attachProductsGrids", [ ...attached, ...this.carriers.attach ], true);
-                    else if(this.sizes.attach.length) this.setField("attachProductsGrids", this.carriers.attach, true);
-                    else this.clearField("attachProductsGrids");
-                    if(detached) this.setField("detachProductsGrids", [ ...detached, ...this.carriers.detach ], true);
-                    else if(this.sizes.detach.length) this.setField("detachProductsGrids", this.carriers.detach, true);
-                    else this.clearField("detachProductsGrids");
-                }
+                this.sizes = sizes;
+                this.setField("productsGrids", [ ...this.carriers, ...sizes ], true);
             }
         }
     },
