@@ -16,5 +16,15 @@ export default {
                     reject(e);
                 });
         });
+    },
+    updateUser({ commit }, data) {
+        return new Promise((resolve, reject) => {
+            http.update(data)
+                .then((resp) => {
+                    const { user } = resp.data;
+                    commit("setUser", user);
+                    resolve(user);
+                }).catch((e) => reject(e));
+        });
     }
 };

@@ -22,14 +22,39 @@
                 validate-rules="required|email"
                 display-error-name="email"
                 placeholder="Email"/>
-            <md-checkbox v-model="updatePassword" class="md-primary">Update password</md-checkbox>
+            <md-checkbox @change="clearPasswords"
+                         v-model="updatePassword" class="md-primary">Update password</md-checkbox>
             <template v-if="updatePassword">
-                test
+                <app-input
+                    v-model="currentPassword"
+                    required
+                    type="password"
+                    validate-name="current_password"
+                    validate-rules="required"
+                    display-error-name="password"
+                    placeholder="Current password"/>
+                <app-input
+                    v-model="newPassword"
+                    required
+                    type="password"
+                    validate-name="new_password"
+                    validate-rules="required|min:8"
+                    display-error-name="password"
+                    placeholder="New password"/>
+                <app-input
+                    v-model="confirmPassword"
+                    required
+                    type="password"
+                    validate-name="confirm_password"
+                    validate-rules="required|min:8"
+                    display-error-name="password"
+                    placeholder="Confirm password"/>
             </template>
             <div class="flex justify-between">
                 <md-button
                     type="submit"
-                    class="md-primary md-raised">Create</md-button>
+                    :disabled="!hasUpdate"
+                    class="md-primary md-raised">Update</md-button>
                 <md-button
                     @click="$emit('closePopup')"
                     class="md-accent md-raised">Cancel</md-button>
@@ -39,7 +64,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import popupMixin from "@mixins/ControlPopup";
 
 export default {
@@ -50,40 +75,56 @@ export default {
             tempDefault: {
                 name: null,
                 email: null,
-                oldPassword: null,
+                currentPassword: null,
                 newPassword: null,
                 confirmPassword: null
             }
         };
     },
     computed: {
-        ...mapState("user", { admin: (state) => state.currentUser }),
+        ...mapState("user", { storeData: (state) => state.currentUser }),
         name: {
-            get() { return this.temp.name; },
-            set(name) { this.setField("name", name, true); }
+            get() { return this.temp.name || this.storeData.name; },
+            set(name) { this.setField("name", name); }
         },
         email: {
-            get() { return this.temp.email; },
+            get() { return this.temp.email || this.storeData.email; },
             set(email) { this.setField("email", email); }
+        },
+        currentPassword: {
+            get() { return this.temp.currentPassword; },
+            set(password) { this.setField("currentPassword", password); }
+        },
+        newPassword: {
+            get() { return this.temp.newPassword; },
+            set(password) { this.setField("newPassword", password); }
+        },
+        confirmPassword: {
+            get() { return this.temp.confirmPassword; },
+            set(password) { this.setField("confirmPassword", password); }
         }
     },
     methods: {
-        ...mapActions("devices", { addDevice: "createDevice" }),
-        create() {
+        ...mapActions("user", { updateUser: "updateUser" }),
+        update() {
             return new Promise((resolve, reject) => {
-                this.addDevice(this.formData)
-                    .then((device) => {
+                this.updateUser(this.formData)
+                    .then((user) => {
                         this.$notify({
-                            title: `Device added`,
-                            text: `Device ${device.name} was created`,
+                            title: "Update user",
+                            text: "User is updated",
                             duration: 3000
                         });
                         this.$emit("closePopup");
-                        this.$emit("addDevice", device);
-                        this.clearForm();
-                        resolve(device);
-                    }).catch((e) => reject(e));
+                        resolve(user);
+                    })
+                    .catch((e) => reject(e));
             });
+        },
+        clearPasswords() {
+            this.clearField("currentPassword");
+            this.clearField("newPassword");
+            this.clearField("confirmPassword");
         }
     }
 };

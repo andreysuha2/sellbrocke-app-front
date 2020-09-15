@@ -26,9 +26,6 @@ export default {
         navigate() {
             if(this.link !== "#") this.$router.push({ name: this.link });
         }
-    },
-    mounted() {
-        dl.log(this.$route, this.link);
     }
 };
 </script>

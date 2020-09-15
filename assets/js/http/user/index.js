@@ -8,6 +8,11 @@ class ApiUserHTTP extends Http {
     load() {
         return this.query.get();
     }
+
+    update(data) {
+        data.set("_method", "PUT");
+        return this.query.post("", data);
+    }
 }
 
 export default new ApiUserHTTP();

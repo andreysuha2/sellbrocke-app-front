@@ -38,7 +38,9 @@
                 </div>
             </div>
         </div>
-        <update-form @closePopup="showUpdatePopup"/>
+        <update-form
+            :show-popup="showUpdatePopup"
+            @closePopup="showUpdatePopup = false"/>
     </app-page>
 </template>
 

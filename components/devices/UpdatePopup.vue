@@ -233,7 +233,7 @@ export default {
                     else if(this.sizes.attach.length) this.setField("attachProductsGrids", this.sizes.attach, true);
                     else this.clearField("attachProductsGrids");
                     if(detach) this.setField("detachProductsGrids", [ ...detach, this.sizes.detach ], true);
-                    else if(this.size.detach.length) this.setField("detachProductsGrids", this.sizes.detach, true);
+                    else if(this.sizes.detach.length) this.setField("detachProductsGrids", this.sizes.detach, true);
                     else this.clearField("detachProductsGrids");
                 }
             }
@@ -253,7 +253,7 @@ export default {
                     else if(this.sizes.attach.length) this.setField("attachProductsGrids", this.carriers.attach, true);
                     else this.clearField("attachProductsGrids");
                     if(detach) this.setField("detachProductsGrids", [ ...detach, this.carriers.detach ], true);
-                    else if(this.size.detach.length) this.setField("detachProductsGrids", this.carriers.detach, true);
+                    else if(this.sizes.detach.length) this.setField("detachProductsGrids", this.carriers.detach, true);
                     else this.clearField("detachProductsGrids");
                 }
             }
