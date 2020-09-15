@@ -228,11 +228,11 @@ export default {
                 if(!this.storeCarriers) {
                     this.setField("attachProductsGrids", [ ...carriers, ...this.sizes.items ], true);
                 } else {
-                    const { attach, detach } = listDiff(carriers, this.storeCarriers);
-                    if(attach) this.setField("attachProductsGrids", [ ...attach, ...this.sizes.attach ], true);
+                    const { attached, detached } = listDiff(carriers, this.storeCarriers);
+                    if(attached) this.setField("attachProductsGrids", [ ...attached, ...this.sizes.attach ], true);
                     else if(this.sizes.attach.length) this.setField("attachProductsGrids", this.sizes.attach, true);
                     else this.clearField("attachProductsGrids");
-                    if(detach) this.setField("detachProductsGrids", [ ...detach, this.sizes.detach ], true);
+                    if(detached) this.setField("detachProductsGrids", [ ...detached, ...this.sizes.detach ], true);
                     else if(this.sizes.detach.length) this.setField("detachProductsGrids", this.sizes.detach, true);
                     else this.clearField("detachProductsGrids");
                 }
@@ -248,11 +248,11 @@ export default {
                 if(!this.storeSizes) {
                     this.setField("attachProductsGrids", [ ...sizes, ...this.carriers.items ], true);
                 } else {
-                    const { attach, detach } = listDiff(sizes, this.storeSizes);
-                    if(attach) this.setField("attachProductsGrids", [ ...attach, ...this.carriers.attach ], true);
+                    const { attached, detached } = listDiff(sizes, this.storeSizes);
+                    if(attached) this.setField("attachProductsGrids", [ ...attached, ...this.carriers.attach ], true);
                     else if(this.sizes.attach.length) this.setField("attachProductsGrids", this.carriers.attach, true);
                     else this.clearField("attachProductsGrids");
-                    if(detach) this.setField("detachProductsGrids", [ ...detach, this.carriers.detach ], true);
+                    if(detached) this.setField("detachProductsGrids", [ ...detached, ...this.carriers.detach ], true);
                     else if(this.sizes.detach.length) this.setField("detachProductsGrids", this.carriers.detach, true);
                     else this.clearField("detachProductsGrids");
                 }
