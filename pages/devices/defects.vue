@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapMutations } from "vuex";
+import { mapGetters, mapState, mapMutations, mapActions } from "vuex";
 import paginationMixin from "@mixins/pages/pagination";
 import CreatePopup from "@components/defects/CreationPopup";
 import UpdatePopup from "@components/defects/UpdatePopup";
@@ -106,6 +106,7 @@ export default {
         ...mapState("app/pagePagination", { defectsList: "items" })
     },
     methods: {
+        ...mapActions("defects", { deleteDefect: "deleteDefect" }),
         ...mapMutations("defects/currentDefect", {
             openUpdatePopup: "setDefect",
             closeUpdatePopup: "cancelDefect"
