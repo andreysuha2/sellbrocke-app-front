@@ -2,7 +2,7 @@
     <div class="devices">
         <md-table class="devices--list devices-list">
             <md-table-row>
-                <md-table-head class="devices-list--id" md-numeric>ID</md-table-head>
+                <md-table-head class="devices-list--id">ID</md-table-head>
                 <md-table-head>Name</md-table-head>
                 <md-table-head>Condition</md-table-head>
                 <md-table-head>Base price</md-table-head>

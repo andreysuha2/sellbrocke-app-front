@@ -24,7 +24,7 @@
                     <md-table-head>Slug</md-table-head>
                     <md-table-head>Base price</md-table-head>
                     <md-table-head>Discounted price</md-table-head>
-                    <md-table-head>Use Products Grids</md-table-head>
+                    <md-table-head>Use PG</md-table-head>
                     <md-table-head>Controls</md-table-head>
                 </md-table-row>
                 <md-table-row v-for="device in devices" :key="device.id">
