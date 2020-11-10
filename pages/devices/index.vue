@@ -21,7 +21,6 @@
                     <md-table-head class="devices-list--id" md-numeric>ID</md-table-head>
                     <md-table-head>Name</md-table-head>
                     <md-table-head>Company</md-table-head>
-                    <md-table-head>Slug</md-table-head>
                     <md-table-head>Base price</md-table-head>
                     <md-table-head>Discounted price</md-table-head>
                     <md-table-head>Use PG</md-table-head>
@@ -50,7 +49,6 @@
                             </div>
                         </nuxt-link>
                     </md-table-cell>
-                    <md-table-cell>{{ device.slug }}</md-table-cell>
                     <md-table-cell>{{ device.prices.base }}$</md-table-cell>
                     <md-table-cell>
                         {{ device.prices.discounted }}$ ({{ device.company.priceReduction }}%)
@@ -252,7 +250,7 @@ export default {
     }
 
     &--controls {
-        min-width: 174px;
+        min-width: 150px;
     }
 }
 
