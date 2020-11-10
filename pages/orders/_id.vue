@@ -123,6 +123,9 @@
             <md-tab id="tab-log" md-label="Order log">
                 <order-log/>
             </md-tab>
+            <md-tab id="tab-shipment-log" md-label="Shipment Log">
+                <div>Shipment Log</div>
+            </md-tab>
         </md-tabs>
     </app-page>
 </template>
