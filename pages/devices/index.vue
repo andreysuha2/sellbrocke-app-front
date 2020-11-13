@@ -243,6 +243,8 @@ export default {
     &--thumbnail {
         width: 50px;
         height: 50px;
+        min-width: 50px;
+        min-height: 50px;
         margin-right: 10px;
         background-size: contain;
         background-repeat: no-repeat;
