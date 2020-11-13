@@ -1,5 +1,7 @@
 const webpack = require("webpack"),
-    path = require("path");
+    path = require("path"),
+    materialComponents = require("./materialComponentsList");
+require("./env.config");
 
 module.exports = {
     vue: { config: { productionTip: false } },
@@ -10,7 +12,7 @@ module.exports = {
         'nuxt-material-design-icons',
         [
             'nuxt-vue-material',
-            { components: [ "MdButton", "MdIcon" ] }
+            { components: materialComponents }
         ]
     ],
     /*
@@ -36,8 +38,21 @@ module.exports = {
     css: [
         { src: "~/assets/scss/main.scss", lang: "scss" }
     ],
-    vendor: [ '~/assets/DevLogger/index.js' ],
-    plugins: [ '~/plugins/register.js' ],
+    vendor: [
+        "vue-notification",
+        "vee-validate",
+        '~/assets/js/devLogger/index.js',
+        '~/assets/js/helpers/generators.js',
+        '~/assets/js/helpers/functions.js',
+        '~/assets/js/http/index.js',
+        '~/assets/js/auth/index.js'
+    ],
+    plugins: [
+        '~/plugins/register.js',
+        '~/plugins/cookieResolve/index.js',
+        { src: '~/plugins/vue-plugins.js', mode: 'client' },
+        { src: '~/plugins/vue-plugins-server.js', mode: 'server' }
+    ],
     /*
   ** Customize the progress bar color
   */
@@ -74,7 +89,11 @@ module.exports = {
                 "@components": path.resolve(__dirname, "./components"),
                 "@global": path.resolve(__dirname, "./components/global"),
                 "@icons": path.resolve(__dirname, "./assets/icons"),
-                "@templates": path.resolve(__dirname, "./components/templates")
+                "@templates": path.resolve(__dirname, "./components/templates"),
+                "@helpers": path.resolve(__dirname, "./assets/js/helpers"),
+                "@http": path.resolve(__dirname, "./assets/js/http"),
+                "@auth": path.resolve(__dirname, "./assets/js/auth"),
+                "@mixins": path.resolve(__dirname, "./mixins")
             };
 
             Object.assign(config.resolve.alias, aliases);

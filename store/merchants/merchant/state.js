@@ -1,0 +1,1 @@
+export default () => ({ merchantId: null });

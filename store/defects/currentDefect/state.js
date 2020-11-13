@@ -1,0 +1,1 @@
+export default () => ({ defectId: null });

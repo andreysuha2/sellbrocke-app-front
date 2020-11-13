@@ -12,3 +12,23 @@ html,
 body {
     color: $appColor;
 }
+
+.md-button {
+    margin: 0;
+}
+
+.page-enter-active, .page-leave-active {
+    transition: opacity .5s;
+}
+.page-enter, .page-leave-active {
+    opacity: 0;
+}
+
+.md-table-head-label {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.md-table-cell-container {
+    padding: 6px 15px;
+}
