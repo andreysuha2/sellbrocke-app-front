@@ -13,7 +13,7 @@
         <md-empty-state
             v-if="!hasDevices"
             md-icon="devices"
-            md-label="Create your first device"
+            :md-label="emptyTitle"
             :md-description="emptyDescription">
             <md-button
                 v-if="canCreate"
@@ -167,7 +167,15 @@ export default {
             hasDevices: "hasDevices"
         }),
         ...mapGetters("devices/currentDevice", { hasCurrentDevice: "hasCurrentDevice" }),
+        emptyTitle() {
+            if(this.searchQuery) return `No results for query "${this.searchQuery}"`;
+            return this.canCreate ? "Create your first device" : "For now you can't create devices";
+        },
         emptyDescription() {
+            if(this.searchQuery) {
+                if(this.canCreate) return "Try to use other query or create new device";
+                return "You must created categories and companies before create devices";
+            }
             return this.canCreate ? "Create device to start you business" : "You must created categories and companies before create devices";
         },
         isUpdate() {
