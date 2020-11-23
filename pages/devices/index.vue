@@ -130,6 +130,9 @@ import paginationMixin from "@mixins/pages/pagination";
 
 export default {
     mixins: [ paginationMixin ],
+    asyncData({ query }) {
+        return { searchQuery: query.qs || "" };
+    },
     async fetch({ store, route, redirect }) {
         try {
             const { page, qs } = route.query;
@@ -147,7 +150,6 @@ export default {
     },
     data() {
         return {
-            searchQuery: "",
             showCreatePopup: false,
             showDeleteConfirmation: false,
             showUpdatePopup: false,
@@ -233,12 +235,6 @@ export default {
                     .catch(e => reject(e));
             });
         }
-    },
-    created() {
-        this.searchQuery = this.$route.query.qs;
-    },
-    updated() {
-        this.searchQuery = this.$route.query.qs;
     }
 };
 </script>
