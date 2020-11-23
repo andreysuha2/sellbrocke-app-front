@@ -5,6 +5,11 @@
                 @click="showCreatePopup = true"
                 class="md-button md-primary md-raised">Add new</md-button>
         </template>
+        <app-search
+            :on-search="search"
+            v-model="searchQuery"
+            name="devices-search"
+            placeholder="Search devices"/>
         <md-empty-state
             v-if="!hasDevices"
             md-icon="devices"
@@ -127,8 +132,8 @@ export default {
     mixins: [ paginationMixin ],
     async fetch({ store, route, redirect }) {
         try {
-            const { page } = route.query;
-            await store.dispatch("devices/loadDevices", page);
+            const { page, qs } = route.query;
+            await store.dispatch("devices/loadDevices", { query: qs, page });
             const { currentPage, lastPage } = store.state.app.pagePagination.pagination;
             if(currentPage > lastPage) redirect({ name: 'devices' });
         } catch (e) {
@@ -142,6 +147,7 @@ export default {
     },
     data() {
         return {
+            searchQuery: "",
             showCreatePopup: false,
             showDeleteConfirmation: false,
             showUpdatePopup: false,
@@ -174,7 +180,10 @@ export default {
             selectDevice: "setDevice",
             closeDevice: "cancelDevice"
         }),
-        ...mapActions("devices", { deleteDevice: "removeDevice" }),
+        ...mapActions("devices", {
+            deleteDevice: "removeDevice",
+            getDevices: "loadDevices"
+        }),
         removeConfirmation({ id, name }) {
             this.deletedDeviceData.id = id;
             this.deletedDeviceData.name = name;
@@ -213,7 +222,23 @@ export default {
                 this.showDisplayPopup = false;
                 this.closeDevice();
             }
+        },
+        search() {
+            return new Promise((resolve, reject) => {
+                this.getDevices({ query: this.searchQuery })
+                    .then(result => {
+                        resolve(result);
+                        this.$router.push({ name: "devices", query: { qs: this.searchQuery } });
+                    })
+                    .catch(e => reject(e));
+            });
         }
+    },
+    created() {
+        this.searchQuery = this.$route.query.qs;
+    },
+    updated() {
+        this.searchQuery = this.$route.query.qs;
     }
 };
 </script>

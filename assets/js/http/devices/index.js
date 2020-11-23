@@ -5,9 +5,10 @@ class DevicesHTTP extends Http {
         super({ slug: "devices" });
     }
 
-    getDevices(page = null) {
+    getDevices(query = null, page = null) {
         let params = {};
         if(page) params.page = page;
+        if(query) params.qs = query;
         return this.query.get("", { params });
     }
 

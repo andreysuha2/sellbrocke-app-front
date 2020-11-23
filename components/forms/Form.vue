@@ -30,6 +30,10 @@ export default {
         noValidate: {
             type: Boolean,
             default: false
+        },
+        usePreloader: {
+            type: Boolean,
+            default: true
         }
     },
     data() {
@@ -56,10 +60,10 @@ export default {
         submited() {
             if(!this.onSubmit) dl.error("Undefined submit callback");
             else {
-                this.preload = true;
+                if(this.usePreloader) this.preload = true;
                 this.onSubmit()
                     .catch((e) => this.handleSubmitErrors(e))
-                    .finally(() => { this.preload = false; });
+                    .finally(() => { if(this.usePreloader) this.preload = false; });
             }
         },
         handleSubmitErrors(e) {

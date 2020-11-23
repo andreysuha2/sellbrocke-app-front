@@ -1,9 +1,9 @@
 import http from "@http/devices";
 
 export default {
-    loadDevices({ commit }, page = null) {
+    loadDevices({ commit }, { query = null, page = null }) {
         return new Promise((resolve, reject) => {
-            http.getDevices(page)
+            http.getDevices(query, page)
                 .then((resp) => {
                     const { companies, categories, productsGrids } = resp.data,
                         { data: devices, meta } = resp.data.devices;
