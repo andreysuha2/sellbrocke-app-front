@@ -1,0 +1,49 @@
+.settings-rows {
+    &--row {
+        display: flex;
+        flex-wrap: wrap;
+
+        &:not(:last-child) {
+            margin-bottom: 15px;
+        }
+    }
+
+    &--cell {
+        &:first-child {
+            font-weight: bold;
+            text-transform: capitalize;
+
+            &:after {
+                content: ':';
+            }
+        }
+
+        &:not(:first-child) {
+            margin-left: 5px;
+        }
+
+        &:not(:last-child) {
+            margin-left: 5px;
+        }
+
+        &--secret{
+            display: flex;
+            align-items: center;
+            width: 100%;
+
+            &:after {
+                display: none;
+            }
+        }
+    }
+
+    &--control {
+        &:not(:first-child) {
+            margin-left: 7.5px;
+        }
+
+        &:not(:last-child) {
+            margin-left: 7.5px;
+        }
+    }
+}
