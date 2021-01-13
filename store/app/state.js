@@ -58,15 +58,8 @@ export default () => ({
         },
         {
             key: genKey("MENU_ITEM"),
-            name: "Shipping",
-            link: "#",
-            icon: "local_shipping",
-            children: null
-        },
-        {
-            key: genKey("MENU_ITEM"),
             name: "Settings",
-            link: "#",
+            link: "settings",
             icon: "settings",
             children: null
         }
