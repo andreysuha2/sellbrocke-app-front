@@ -11,7 +11,9 @@
             <child-item
                 v-for="item in children"
                 v-bind="item"
-                :key="item.key"/>
+                :key="item.key"
+                @clickSub="onClickSub"
+            />
         </div>
     </div>
 </template>
@@ -61,6 +63,11 @@ export default {
     methods: {
         closeSub() {
             this.subOpen = false;
+        },
+        onClickSub() {
+            setTimeout(() => {
+                this.subOpen = true;
+            }, 0);
         },
         navigate() {
             if(this.canOpen) this.$router.push({ name: this.link });
