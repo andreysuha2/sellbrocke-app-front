@@ -25,6 +25,7 @@ export default {
     methods: {
         navigate() {
             if(this.link !== "#") this.$router.push({ name: this.link });
+            this.$emit('clickSub');
         }
     }
 };
