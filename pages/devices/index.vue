@@ -5,10 +5,15 @@
                 @click="showCreatePopup = true"
                 class="md-button md-primary md-raised">Add new</md-button>
         </template>
+        <app-search
+            :on-search="search"
+            v-model="searchQuery"
+            name="devices-search"
+            placeholder="Search devices"/>
         <md-empty-state
             v-if="!hasDevices"
             md-icon="devices"
-            md-label="Create your first device"
+            :md-label="emptyTitle"
             :md-description="emptyDescription">
             <md-button
                 v-if="canCreate"
@@ -125,10 +130,13 @@ import paginationMixin from "@mixins/pages/pagination";
 
 export default {
     mixins: [ paginationMixin ],
+    asyncData({ query }) {
+        return { searchQuery: query.qs || "" };
+    },
     async fetch({ store, route, redirect }) {
         try {
-            const { page } = route.query;
-            await store.dispatch("devices/loadDevices", page);
+            const { page, qs } = route.query;
+            await store.dispatch("devices/loadDevices", { query: qs, page });
             const { currentPage, lastPage } = store.state.app.pagePagination.pagination;
             if(currentPage > lastPage) redirect({ name: 'devices' });
         } catch (e) {
@@ -159,7 +167,15 @@ export default {
             hasDevices: "hasDevices"
         }),
         ...mapGetters("devices/currentDevice", { hasCurrentDevice: "hasCurrentDevice" }),
+        emptyTitle() {
+            if(this.searchQuery) return `No results for query "${this.searchQuery}"`;
+            return this.canCreate ? "Create your first device" : "For now you can't create devices";
+        },
         emptyDescription() {
+            if(this.searchQuery) {
+                if(this.canCreate) return "Try to use other query or create new device";
+                return "You must created categories and companies before create devices";
+            }
             return this.canCreate ? "Create device to start you business" : "You must created categories and companies before create devices";
         },
         isUpdate() {
@@ -174,7 +190,10 @@ export default {
             selectDevice: "setDevice",
             closeDevice: "cancelDevice"
         }),
-        ...mapActions("devices", { deleteDevice: "removeDevice" }),
+        ...mapActions("devices", {
+            deleteDevice: "removeDevice",
+            getDevices: "loadDevices"
+        }),
         removeConfirmation({ id, name }) {
             this.deletedDeviceData.id = id;
             this.deletedDeviceData.name = name;
@@ -213,6 +232,16 @@ export default {
                 this.showDisplayPopup = false;
                 this.closeDevice();
             }
+        },
+        search() {
+            return new Promise((resolve, reject) => {
+                this.getDevices({ query: this.searchQuery })
+                    .then(result => {
+                        resolve(result);
+                        this.$router.push({ name: "devices", query: { qs: this.searchQuery } });
+                    })
+                    .catch(e => reject(e));
+            });
         }
     }
 };
