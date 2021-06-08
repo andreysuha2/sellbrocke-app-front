@@ -5,8 +5,10 @@ class OrdersHTTP extends Http {
         super({ slug: "orders" });
     }
 
-    getOrders(page = null) {
-        const params = page ? { page } : {};
+    getOrders(query = null, page = null) {
+        const params = {};
+        if(query) params.qs = query;
+        if(page) params.page = page;
         return this.query.get("", { params });
     }
 

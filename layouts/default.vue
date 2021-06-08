@@ -22,6 +22,7 @@ import AppFooter from "@global/TheFooter";
 import AppMenu from "@global/TheMenu";
 
 export default {
+    name: "default",
     middleware: "authenticate",
     components: {
         "app-header": AppHeader,
@@ -66,4 +67,3 @@ export default {
     }
 }
 </style>
-

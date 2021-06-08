@@ -5,8 +5,9 @@ class CustomersHTTP extends Http {
         super({ slug: "customers" });
     }
 
-    getCustomers(page = null) {
-        let params = {};
+    getCustomers(query = null, page = null) {
+        const params = {};
+        if(query) params.qs = query;
         if(page) params.page = page;
         return this.query.get("", { params });
     }
