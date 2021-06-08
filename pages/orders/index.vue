@@ -3,8 +3,8 @@
         <app-search
             :on-search="search"
             v-model="searchQuery"
-            name="customers-search"
-            placeholder="Search customers"/>
+            name="orders-search"
+            placeholder="Search orders"/>
         <md-empty-state
             v-if="!hasOrders"
             md-icon="assignment"
