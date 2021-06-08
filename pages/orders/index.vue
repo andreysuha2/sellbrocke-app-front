@@ -1,5 +1,10 @@
 <template>
     <app-page v-if="isCurrentPaginateItems" title="Orders">
+        <app-search
+            :on-search="search"
+            v-model="searchQuery"
+            name="customers-search"
+            placeholder="Search customers"/>
         <md-empty-state
             v-if="!hasOrders"
             md-icon="assignment"
@@ -54,15 +59,18 @@
 
 <script>
 import paginationMixin from "@mixins/pages/pagination";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import moment from "moment";
 
 export default {
     mixins: [ paginationMixin ],
+    asyncData({ query }) {
+        return { searchQuery: query.qs || "" };
+    },
     async fetch({ store, route, redirect }) {
         try {
-            const { page } = route.query;
-            await store.dispatch("orders/loadOrders", page);
+            const { page, qs } = route.query;
+            await store.dispatch("orders/loadOrders", { query: qs, page });
             const { currentPage, lastPage } = store.state.app.pagePagination.pagination;
             if(currentPage > lastPage) redirect({ name: 'devices-defects' });
         } catch (e) {
@@ -84,11 +92,22 @@ export default {
         hasOrders() { return Boolean(this.orders.length); }
     },
     methods: {
+        ...mapActions("orders", [ "loadOrders" ]),
         getCustomerLink(customer) {
             return `${customer.merchant.url}/wp-admin/user-edit.php?user_id=${customer.ids.merchant}`;
         },
         viewOrder(orderId) {
             this.$router.push({ name: "orders-id", params: { id: orderId } });
+        },
+        search() {
+            return new Promise((resolve, reject) => {
+                this.loadOrders({ query: this.searchQuery })
+                    .then(result => {
+                        resolve(result);
+                        this.$router.push({ name: "orders", query: { qs: this.searchQuery } });
+                    })
+                    .catch(e => reject(e));
+            });
         }
     }
 };
